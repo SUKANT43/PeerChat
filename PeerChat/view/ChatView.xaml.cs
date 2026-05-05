@@ -50,7 +50,5 @@ namespace PeerChat.View
                 fullImageWindow.ShowDialog();
             }
         }
-
-
     }
 }

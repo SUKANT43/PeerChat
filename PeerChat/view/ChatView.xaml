@@ -149,7 +149,7 @@
                     </StackPanel>
                 </Border>
 
-                <Grid>
+                <Grid Visibility="{Binding IsTextFieldVisible,Converter={StaticResource BoolToVisibility},Mode=TwoWay}">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="*"/>
@@ -212,9 +212,13 @@
                 <CheckBox Content="Debug Log"  
                           Margin="20,5,0,0"
                           Foreground="{DynamicResource TextPrimaryBrush}"
-                          FontWeight="Bold"/>
+                          FontWeight="Bold"
+                          IsChecked="{Binding IsDebugConsoleVisible,Mode=TwoWay}"/>
 
-                <comp:DebugLogPanel Height="300" DataList="{Binding MessageList}"/>
+                <comp:DebugLogPanel Margin="0,10,0,0" 
+                                    Height="200" 
+                                    DebugList="{Binding DebugLogList}" 
+                                    Visibility="{Binding IsDebugConsoleVisible,Converter={StaticResource BoolToVisibility}}"/>
 
             </StackPanel>
         </Border>

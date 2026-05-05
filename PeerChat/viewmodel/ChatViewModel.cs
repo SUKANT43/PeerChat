@@ -33,6 +33,7 @@ namespace PeerChat.ViewModel
         private bool _isTyping;
 
         public ObservableCollection<MessageModel> MessageList { get; private set; }
+        public ObservableCollection<DebugLogModel> DebugLogList { get; private set; }
 
         public ChatViewModel(MainViewModel mainViewModel, TcpClient client, string name, UserRole role)
         {
@@ -42,6 +43,7 @@ namespace PeerChat.ViewModel
             _role = role;
             _chatService = new ChatService(_client);
             MessageList = new ObservableCollection<MessageModel>();
+            DebugLogList = new ObservableCollection<DebugLogModel>();
 
             _typingTimer = new Timer(StopTyping, null, Timeout.Infinite, Timeout.Infinite);
 
@@ -50,7 +52,6 @@ namespace PeerChat.ViewModel
             SendImageCommand = new RelayCommand(async o => await SendImage());
             CancelImageCommand = new RelayCommand(o => ClearPreview());
             ToggleThemeCommand = new RelayCommand(o => ToggleTheme());
-
             Initialize();
         }
 
@@ -102,6 +103,28 @@ namespace PeerChat.ViewModel
             }
         }
 
+        private bool _isDebugConsoleVisible = false;
+        public bool IsDebugConsoleVisible
+        {
+            get => _isDebugConsoleVisible;
+            set
+            {
+                _isDebugConsoleVisible = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public bool _isTextFiledVisible = true;
+        public bool IsTextFieldVisible
+        {
+            get => _isTextFiledVisible;
+            set
+            {
+                _isTextFiledVisible = value;
+                OnPropertyChanged();
+            }
+        }
+
         public bool IsTypingVisible => !string.IsNullOrEmpty(TypingStatus);
 
         private byte[] _selectedImageBytes;
@@ -120,7 +143,6 @@ namespace PeerChat.ViewModel
         }
 
         public bool IsImagePreviewVisible => PreviewImage != null;
-
 
         private async void Initialize()
         {
@@ -150,7 +172,7 @@ namespace PeerChat.ViewModel
                 {
                     Content = Message
                 });
-
+                AddDebugLog(MessageDirection.Sent, MessageType.Text, data);
                 Message = string.Empty;
             }
             catch (Exception ex)
@@ -188,16 +210,23 @@ namespace PeerChat.ViewModel
             await _chatService.SendMessageAsync((byte)MessageType.Typing, new byte[] { 0 });
         }
 
+        private bool _isRunning = true;
+
+
         private void StartReceiveLoop()
         {
             Task.Run(async () =>
             {
-
-                while (true)
+                while (_isRunning)
                 {
                     try
                     {
                         MessageFrameModel frame = await _chatService.ReceiveMessageAsync();
+
+                        if (frame != null && frame.Payload != null)
+                        {
+                            AddDebugLog(MessageDirection.Received, (MessageType)frame.Type, frame.Payload);
+                        }
 
                         if (frame == null || frame.Payload == null) continue;
 
@@ -251,19 +280,39 @@ namespace PeerChat.ViewModel
                                 });
                             });
                         }
-                    }
-                    catch (Exception ex)
-                    {
-                        Application.Current.Dispatcher.Invoke(() =>
+                        else if ((MessageType)frame.Type == MessageType.Disconnect)
                         {
-                            MessageBox.Show($"Connection lost: {ex.Message}");
-                        });
+                            HandleDisconnect();
+                        }
+                    }
+                    catch (IOException)
+                    {
+                        HandleDisconnect();
                         break;
                     }
-
+                    catch (SocketException)
+                    {
+                        HandleDisconnect();
+                        break;
+                    }
+                    catch (Exception)
+                    {
+                        HandleDisconnect();
+                        break;
+                    }
                 }
             });
         }
+
+        private void HandleDisconnect()
+        {
+            _isRunning = false;
+            IsTextFieldVisible = false;
+            PreviewImage = null;
+            TypingStatus = null;
+
+        }
+
         public async Task OpenImageFolder()
         {
             try
@@ -284,6 +333,9 @@ namespace PeerChat.ViewModel
                     _selectedImageName = Path.GetFileName(filePath);
 
                     PreviewImage = FileHelper.ConvertToImage(_selectedImageBytes);
+
+                    IsTextFieldVisible = false;
+
                 }
             }
             catch (Exception ex)
@@ -308,8 +360,9 @@ namespace PeerChat.ViewModel
                     FileName = _selectedImageName,
                     ImageData = FileHelper.ConvertToImage(_selectedImageBytes)
                 });
-
+                AddDebugLog(MessageDirection.Sent, MessageType.Image, payload);
                 ClearPreview();
+                IsTextFieldVisible = true;
             }
             catch (Exception ex)
             {
@@ -322,6 +375,7 @@ namespace PeerChat.ViewModel
             _selectedImageBytes = null;
             _selectedImageName = null;
             PreviewImage = null;
+            IsTextFieldVisible = true; 
         }
 
         private bool _isDarkMode = false;
@@ -345,5 +399,36 @@ namespace PeerChat.ViewModel
             _isDarkMode = !_isDarkMode;
 
         }
+
+        private void AddDebugLog(MessageDirection direction,MessageType type, byte[] payload)
+        {
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                DebugLogList.Add(new DebugLogModel(direction, type, payload.Length));
+            });
+
+        }
+
+        public async Task DisconnectAsync()
+        {
+            try
+            {
+                await _chatService.SendMessageAsync((byte)MessageType.Disconnect, Array.Empty<byte>());
+            }
+            catch
+            {
+
+            }
+
+            try
+            {
+                _client?.Close();
+            }
+            catch
+            {
+
+            }
+        }
+       
     }
 }

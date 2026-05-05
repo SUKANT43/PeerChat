@@ -1,111 +1,62 @@
 ﻿<UserControl x:Class="PeerChat.Components.DebugLogPanel"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:PeerChat.Components"
-             Background="{DynamicResource SurfaceBrush}">
-
-    <UserControl.Resources>
-
-        <!-- Console Text Style -->
-        <Style x:Key="ConsoleTextStyle" TargetType="TextBlock">
-            <Setter Property="FontFamily" Value="Consolas"/>
-            <Setter Property="FontSize" Value="12"/>
-            <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
-        </Style>
-
-        <!-- Direction Color Style -->
-        <Style x:Key="DirectionTextStyle" TargetType="TextBlock" BasedOn="{StaticResource ConsoleTextStyle}">
-            <Style.Triggers>
-                <DataTrigger Binding="{Binding Direction}" Value="Sent">
-                    <Setter Property="Foreground" Value="{DynamicResource AccentBrush}"/>
-                </DataTrigger>
-                <DataTrigger Binding="{Binding Direction}" Value="Received">
-                    <Setter Property="Foreground" Value="{DynamicResource SuccessBrush}"/>
-                </DataTrigger>
-            </Style.Triggers>
-        </Style>
-
-    </UserControl.Resources>
+             Background="{DynamicResource BackgroundBrush}">
 
     <Border Background="{DynamicResource SurfaceBrush}"
             BorderBrush="{DynamicResource BorderBrush}"
             BorderThickness="1"
             Padding="6">
 
-        <Grid>
-            <Grid.RowDefinitions>
-                <!-- Header -->
-                <RowDefinition Height="Auto"/>
-                <!-- Log List -->
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
+        <ListBox ItemsSource="{Binding DebugList, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                 Background="Transparent"
+                 BorderThickness="0"
+                 ScrollViewer.VerticalScrollBarVisibility="Auto"
+                 FontFamily="Consolas"
+                 FontSize="12"
+                 Foreground="{DynamicResource TextPrimaryBrush}"
+                 >
 
-            <!-- Header -->
-            <TextBlock Text="Debug Log"
-                       FontWeight="Bold"
-                       Margin="4"
-                       Foreground="{DynamicResource TextSecondaryBrush}"/>
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="ListBoxItem">
+                    <Setter Property="Background" Value="Transparent"/>
+                    <Setter Property="BorderThickness" Value="0"/>
+                    <Setter Property="Focusable" Value="False"/>
 
-            <!-- Log List -->
-            <ListBox Grid.Row="1"
-                     ItemsSource="{Binding DataList, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                     Background="{DynamicResource BackgroundBrush}"
-                     BorderThickness="0"
-                     ScrollViewer.VerticalScrollBarVisibility="Auto">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="ListBoxItem">
+                                <ContentPresenter />
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </ListBox.ItemContainerStyle>
 
-                <ListBox.ItemContainerStyle>
-                    <Style TargetType="ListBoxItem">
-                        <Setter Property="Padding" Value="2"/>
-                        <Setter Property="Margin" Value="0"/>
-                        <Setter Property="Background" Value="Transparent"/>
-                    </Style>
-                </ListBox.ItemContainerStyle>
 
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
 
-                        <Grid Margin="2">
-                            <Grid.ColumnDefinitions>
-                                <!-- Timestamp -->
-                                <ColumnDefinition Width="140"/>
-                                <!-- Direction -->
-                                <ColumnDefinition Width="70"/>
-                                <!-- Type -->
-                                <ColumnDefinition Width="100"/>
-                                <!-- Size -->
-                                <ColumnDefinition Width="100"/>
-                            </Grid.ColumnDefinitions>
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock>
+                        <Run Text="["/>
+                        <TextBlock Text="{Binding Timestamp, Mode=OneWay, StringFormat={}{0:HH:mm:ss.fff}}"/>                        
+                        
+                        <Run Text="] "/>
 
-                            <!-- Timestamp -->
-                            <TextBlock Grid.Column="0"
-                                       Style="{StaticResource ConsoleTextStyle}"
-                                       Text="{Binding TimeStamp, StringFormat=[{0:HH:mm:ss.fff}]}"/>
+                        <Run Text="{Binding Direction, Mode=OneWay}"/>
 
-                            <!-- Direction -->
-                            <TextBlock Grid.Column="1"
-                                       Style="{StaticResource DirectionTextStyle}"
-                                       Text="{Binding Direction}"/>
+                        <Run Text=" | "/>
 
-                            <!-- Type -->
-                            <TextBlock Grid.Column="2"
-                                       Style="{StaticResource ConsoleTextStyle}"
-                                       Text="{Binding Type}"/>
+                        <Run Text="{Binding Type, Mode=OneWay}"/>
 
-                            <!-- Payload Size -->
-                            <TextBlock Grid.Column="3"
-                                       Style="{StaticResource ConsoleTextStyle}">
-                                <Run Text="Size: "/>
-                                <Run Text="{Binding Content.Length}"/>
-                                <Run Text=" B"/>
-                            </TextBlock>
+                        <Run Text=" | "/>
 
-                        </Grid>
+                        <Run Text="{Binding PayloadSize, Mode=OneWay}"/>
+                        <Run Text=" B"/>
+                    </TextBlock>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
 
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-
-            </ListBox>
-        </Grid>
+        </ListBox>
     </Border>
 </UserControl>

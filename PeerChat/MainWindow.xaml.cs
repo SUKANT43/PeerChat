@@ -1,4 +1,5 @@
 ﻿using PeerChat.ViewModel;
+using System.ComponentModel;
 using System.Windows;
 
 namespace PeerChat
@@ -10,5 +11,17 @@ namespace PeerChat
             InitializeComponent();
             DataContext = new MainViewModel();
         }
+
+
+        protected override async void OnClosing(CancelEventArgs e)
+        {
+            base.OnClosing(e);
+
+            if(DataContext is MainViewModel mainVm && mainVm.CurrentView is ChatViewModel vm)
+            {
+                await vm.DisconnectAsync();
+            }
+        }
+
     }
 }

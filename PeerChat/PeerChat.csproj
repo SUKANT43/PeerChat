@@ -61,7 +61,7 @@
     <Compile Include="Components\TopBar.xaml.cs">
       <DependentUpon>TopBar.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Models\LogModel.cs" />
+    <Compile Include="Models\DebugLogModel.cs" />
     <Compile Include="Protocol\MessageProtocol.cs" />
     <Compile Include="Services\ChatService.cs" />
     <Compile Include="Services\ConnectionService.cs" />
