@@ -14,9 +14,9 @@
     <SolidColorBrush x:Key="TextFadeBrush" Color="Gray"/>
 
     <!-- Chat Message Colors -->
-    <SolidColorBrush x:Key="ChatSentBrush" Color="#086250"/>
-    <SolidColorBrush x:Key="ChatReceivedBrush" Color="#404343"/>
-    <SolidColorBrush x:Key="ChatSentTextBrush" Color="#212121"/>
-    <SolidColorBrush x:Key="ChatReceivedTextBrush" Color="#212121"/>
-
+    <SolidColorBrush x:Key="ChatSentBrush" Color="#127a73"/>
+    <SolidColorBrush x:Key="ChatReceivedBrush" Color="#E5E7EB"/>
+    <SolidColorBrush x:Key="ChatSentTextBrush" Color="#FFFFFF"/>
+    <SolidColorBrush x:Key="ChatReceivedTextBrush" Color="#111827"/>
+    
 </ResourceDictionary>

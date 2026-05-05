@@ -52,7 +52,7 @@
                         <Run Text=" | "/>
 
                         <Run Text="{Binding PayloadSize, Mode=OneWay}"/>
-                        <Run Text=" B"/>
+                        <Run Text="Byte"/>
                     </TextBlock>
                 </DataTemplate>
             </ListBox.ItemTemplate>

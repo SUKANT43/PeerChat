@@ -6,7 +6,7 @@
     <SolidColorBrush x:Key="SurfaceBrush" Color="#FFFFFF"/>
     <SolidColorBrush x:Key="BorderBrush" Color="#E0E0E0"/>
     <SolidColorBrush x:Key="TextPrimaryBrush" Color="#212121"/>
-    <SolidColorBrush x:Key="TextSecondaryBrush" Color="#757575"/>
+    <SolidColorBrush x:Key="TextSecondaryBrush" Color="Black"/>
     <SolidColorBrush x:Key="AccentBrush" Color="#007ACC"/>
     <SolidColorBrush x:Key="AccentHoverBrush" Color="#005A9E"/>
     <SolidColorBrush x:Key="DangerBrush" Color="#D32F2F"/>
@@ -15,9 +15,8 @@
 
 
     <!-- Chat Message Colors -->
-    <SolidColorBrush x:Key="ChatSentBrush" Color="#d6f0c4"/>
-    <SolidColorBrush x:Key="ChatReceivedBrush" Color="#E8E8E8"/>
-    <SolidColorBrush x:Key="ChatSentTextBrush" Color="#212121"/>
-    <SolidColorBrush x:Key="ChatReceivedTextBrush" Color="#212121"/>
-
+    <SolidColorBrush x:Key="ChatSentBrush" Color="#127a73"/>
+    <SolidColorBrush x:Key="ChatReceivedBrush" Color="#E5E7EB"/>
+    <SolidColorBrush x:Key="ChatSentTextBrush" Color="#FFFFFF"/>
+    <SolidColorBrush x:Key="ChatReceivedTextBrush" Color="#111827"/>
 </ResourceDictionary>

@@ -24,7 +24,7 @@
         </Grid.RowDefinitions>
 
         <comp:TopBar Grid.Row="0"
-                     PeerName="{Binding PeerName}" 
+                     PeerName="{Binding ChatTitle}" 
                      ToggleThemeCommand="{Binding ToggleThemeCommand}" />
 
         <Border Grid.Row="1"

@@ -28,9 +28,9 @@ namespace PeerChat.ViewModel
             CurrentView = new ConnectionViewModel(this);
         }
 
-        public void NavigateToChat(TcpClient client, string name, UserRole role)
+        public void NavigateToChat(TcpClient client, string name, UserRole role,string connectionIPAdress)
         {
-            CurrentView = new ChatViewModel(this, client, name, role);
+            CurrentView = new ChatViewModel(this, client, name, role, connectionIPAdress);
         }
     }
 }

@@ -167,7 +167,7 @@ namespace PeerChat.ViewModel
                 IsWaiting = false;
                 _listener.Stop();
 
-                _mainViewModel.NavigateToChat(client, Name, Role);
+                _mainViewModel.NavigateToChat(client, Name, Role,ConnectionIPAdress);
             }
             catch (Exception ex)
             {
@@ -198,7 +198,7 @@ namespace PeerChat.ViewModel
                 ErrorMessage = null;
                 var cts = new CancellationTokenSource(TimeSpan.FromSeconds(5));
                 var client = await ConnectionService.ConnectAsync(ConnectionIPAdress, Port, cts.Token);
-                _mainViewModel.NavigateToChat(client, Name, Role);
+                _mainViewModel.NavigateToChat(client, Name, Role,ConnectionIPAdress);
             }
             catch (Exception ex)
             {

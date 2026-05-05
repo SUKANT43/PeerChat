@@ -31,16 +31,18 @@ namespace PeerChat.ViewModel
         private UserRole _role;
         private Timer _typingTimer;
         private bool _isTyping;
+        private string _connectionIPAdress;
 
         public ObservableCollection<MessageModel> MessageList { get; private set; }
         public ObservableCollection<DebugLogModel> DebugLogList { get; private set; }
 
-        public ChatViewModel(MainViewModel mainViewModel, TcpClient client, string name, UserRole role)
+        public ChatViewModel(MainViewModel mainViewModel, TcpClient client, string name, UserRole role,string connectionIPAdress)
         {
             _mainViewModel = mainViewModel;
             _client = client;
             _myName = name;
             _role = role;
+            _connectionIPAdress = connectionIPAdress;
             _chatService = new ChatService(_client);
             MessageList = new ObservableCollection<MessageModel>();
             DebugLogList = new ObservableCollection<DebugLogModel>();
@@ -144,12 +146,25 @@ namespace PeerChat.ViewModel
 
         public bool IsImagePreviewVisible => PreviewImage != null;
 
+        public string _chatTitle;
+        public string ChatTitle
+        {
+            get => _chatTitle;
+            private set
+            {
+                _chatTitle = value;
+                OnPropertyChanged();
+            }
+        }
+
         private async void Initialize()
         {
             try
             {
                 await _chatService.SendNameAsync(_myName);
                 PeerName = await _chatService.ReceiveNameAsync();
+                ChatTitle = $"PeerChat — {_myName} ↔ {_connectionIPAdress} ({PeerName})";
+
                 StartReceiveLoop();
             }
             catch (Exception ex)
@@ -178,6 +193,7 @@ namespace PeerChat.ViewModel
             catch (Exception ex)
             {
                 MessageBox.Show($"Send failed: {ex.Message}");
+                HandleDisconnect();
             }
         }
 
