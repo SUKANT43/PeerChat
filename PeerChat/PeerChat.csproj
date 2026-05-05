@@ -55,9 +55,13 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Components\DebugLogPanel.xaml.cs">
+      <DependentUpon>DebugLogPanel.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Components\TopBar.xaml.cs">
       <DependentUpon>TopBar.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Models\LogModel.cs" />
     <Compile Include="Protocol\MessageProtocol.cs" />
     <Compile Include="Services\ChatService.cs" />
     <Compile Include="Services\ConnectionService.cs" />
@@ -70,6 +74,10 @@
     <Compile Include="view\ConnectionView.xaml.cs">
       <DependentUpon>ConnectionView.xaml</DependentUpon>
     </Compile>
+    <Page Include="Components\DebugLogPanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Components\TopBar.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

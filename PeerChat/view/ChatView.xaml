@@ -166,7 +166,7 @@
                   
 
                     <TextBox Grid.Column="1"
-                             Text="{Binding Message, UpdateSourceTrigger=PropertyChanged}"
+                             Text="{Binding Message, UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"
                              Height="40"
                              Padding="12,10"
                              VerticalContentAlignment="Center"
@@ -205,9 +205,17 @@
                 <TextBlock Text="{Binding TypingStatus}"
                            FontSize="11"
                            FontStyle="Italic"
-                           Foreground="{DynamicResource TextSecondaryBrush}"
-                           Margin="10,5,0,0"
+                           Foreground="{DynamicResource TextFadeBrush}"
+                           Margin="40,5,0,0"
                            Visibility="{Binding IsTypingVisible, Converter={StaticResource BoolToVisibility}}"/>
+
+                <CheckBox Content="Debug Log"  
+                          Margin="20,5,0,0"
+                          Foreground="{DynamicResource TextPrimaryBrush}"
+                          FontWeight="Bold"/>
+
+                <comp:DebugLogPanel Height="300" DataList="{Binding MessageList}"/>
+
             </StackPanel>
         </Border>
     </Grid>

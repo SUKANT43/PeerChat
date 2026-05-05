@@ -78,13 +78,13 @@ namespace PeerChat.ViewModel
             set
             {
                 _message = value;
-
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(IsVisible));
 
-                if (!string.IsNullOrEmpty(Message))
+                if (!string.IsNullOrEmpty(value))
+                {
                     SendTypingIndicator();
-
+                }
             }
         }
 
@@ -159,21 +159,33 @@ namespace PeerChat.ViewModel
             }
         }
 
+        private DateTime _lastTypingSent = DateTime.MinValue;
+
         private async void SendTypingIndicator()
         {
-            if (!_isTyping)
+
+            if ((DateTime.Now - _lastTypingSent).TotalMilliseconds < 500)
             {
-                _isTyping = true;
-                var data = Encoding.UTF8.GetBytes("typing");
-                await _chatService.SendMessageAsync((byte)MessageType.Typing, data);
+                return;
             }
+
+            _lastTypingSent = DateTime.Now;
+
+            await _chatService.SendMessageAsync((byte)MessageType.Typing, Array.Empty<byte>());
+
+            _isTyping = true;
 
             _typingTimer.Change(1500, Timeout.Infinite);
         }
 
-        private void StopTyping(object state)
+        private async void StopTyping(object state)
         {
+            if (!_isTyping)
+                return;
+
             _isTyping = false;
+
+            await _chatService.SendMessageAsync((byte)MessageType.Typing, new byte[] { 0 });
         }
 
         private void StartReceiveLoop()
@@ -206,15 +218,22 @@ namespace PeerChat.ViewModel
                         {
                             Application.Current.Dispatcher.Invoke(() =>
                             {
-                                TypingStatus = $"{PeerName} is typing...";
-                                Task.Delay(2000).ContinueWith(o =>
+                                if (frame.Payload.Length == 0)
                                 {
-                                    Application.Current.Dispatcher.Invoke(() =>
+                                    TypingStatus = $"{PeerName} is typing...";
+                                    Task.Delay(2000).ContinueWith(o =>
                                     {
-                                        if (TypingStatus != null)
-                                            TypingStatus = null;
+                                        Application.Current.Dispatcher.Invoke(() =>
+                                        {
+                                            if (TypingStatus != null)
+                                                TypingStatus = null;
+                                        });
                                     });
-                                });
+                                }
+                                else
+                                {
+                                    TypingStatus = null;
+                                }
                             });
                         }
                         else if ((MessageType)frame.Type == MessageType.Image)
@@ -305,7 +324,7 @@ namespace PeerChat.ViewModel
             PreviewImage = null;
         }
 
-        private bool _isDarkMode = true;
+        private bool _isDarkMode = false;
 
         private void ToggleTheme()
         {

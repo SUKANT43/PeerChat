@@ -11,6 +11,7 @@
     <SolidColorBrush x:Key="AccentHoverBrush" Color="#005A9E"/>
     <SolidColorBrush x:Key="DangerBrush" Color="#E74856"/>
     <SolidColorBrush x:Key="SuccessBrush" Color="#16C60C"/>
+    <SolidColorBrush x:Key="TextFadeBrush" Color="Gray"/>
 
     <!-- Chat Message Colors -->
     <SolidColorBrush x:Key="ChatSentBrush" Color="#086250"/>
