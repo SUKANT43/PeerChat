@@ -18,6 +18,17 @@ namespace PeerChat.ViewModel
             }
         }
 
+        private string _currentTitle;
+        public string CurrentTitle
+        {
+            get => _currentTitle;
+            set
+            {
+                _currentTitle = value;
+                OnPropertyChanged();
+            }
+        }
+
         public MainViewModel()
         {
             NavigateToConnection();

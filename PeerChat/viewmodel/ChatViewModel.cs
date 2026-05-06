@@ -156,16 +156,7 @@ namespace PeerChat.ViewModel
 
         public bool IsImagePreviewVisible => PreviewImage != null;
 
-        public string _chatTitle;
-        public string ChatTitle
-        {
-            get => _chatTitle;
-            private set
-            {
-                _chatTitle = value;
-                OnPropertyChanged();
-            }
-        }
+      
 
         private async void Initialize()
         {
@@ -173,7 +164,7 @@ namespace PeerChat.ViewModel
             {
                 await _chatService.SendNameAsync(_myName);
                 PeerName = await _chatService.ReceiveNameAsync();
-                ChatTitle = $"PeerChat — {_myName} ↔ {_connectionIPAdress} ({PeerName})";
+                _mainViewModel.CurrentTitle = $"PeerChat — {_myName} ↔ {_connectionIPAdress} ({PeerName})";
                 UserStatus = "Online";
                 ThemeText = "🌙";
                 StartReceiveLoop();

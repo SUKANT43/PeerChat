@@ -28,10 +28,11 @@ namespace PeerChat.ViewModel
             SelectHostCommand = new RelayCommand(o => SelectHost());
             SelectJoinCommand = new RelayCommand(o => SelectJoin());
             CopyAddressCommand = new RelayCommand(o => CopyAddress());
-
+            
             Role = UserRole.User;
             Port = 9000;
             Name = Environment.UserName;
+           
         }
 
         private string _errorMessage;
