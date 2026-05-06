@@ -65,13 +65,13 @@
     <Compile Include="Protocol\MessageProtocol.cs" />
     <Compile Include="Services\ChatService.cs" />
     <Compile Include="Services\ConnectionService.cs" />
-    <Compile Include="viewmodel\ChatViewModel.cs" />
-    <Compile Include="viewmodel\ConnectionViewModel.cs" />
-    <Compile Include="viewmodel\MainViewModel.cs" />
-    <Compile Include="view\ChatView.xaml.cs">
+    <Compile Include="ViewModel\ChatViewModel.cs" />
+    <Compile Include="ViewModel\ConnectionViewModel.cs" />
+    <Compile Include="ViewModel\MainViewModel.cs" />
+    <Compile Include="View\ChatView.xaml.cs">
       <DependentUpon>ChatView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="view\ConnectionView.xaml.cs">
+    <Compile Include="View\ConnectionView.xaml.cs">
       <DependentUpon>ConnectionView.xaml</DependentUpon>
     </Compile>
     <Page Include="Components\DebugLogPanel.xaml">
@@ -121,11 +121,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="view\ChatView.xaml">
+    <Page Include="View\ChatView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="view\ConnectionView.xaml">
+    <Page Include="View\ConnectionView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

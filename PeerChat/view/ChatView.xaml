@@ -158,7 +158,7 @@
 
                     <Button Grid.Column="0"
                             Style="{StaticResource IconButtonStyle}"
-                            Command="{Binding OpenImageFolderCommand}"
+                            Command="{Binding SendVideoCommand}"
                             ToolTip="Send Image">
                         <TextBlock Text="📎" FontSize="20" Foreground="{DynamicResource TextPrimaryBrush}"/>
                     </Button>

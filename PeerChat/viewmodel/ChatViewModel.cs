@@ -36,7 +36,7 @@ namespace PeerChat.ViewModel
         public ObservableCollection<MessageModel> MessageList { get; private set; }
         public ObservableCollection<DebugLogModel> DebugLogList { get; private set; }
 
-        public ChatViewModel(MainViewModel mainViewModel, TcpClient client, string name, UserRole role,string connectionIPAdress)
+        public ChatViewModel(MainViewModel mainViewModel, TcpClient client, string name, UserRole role, string connectionIPAdress)
         {
             _mainViewModel = mainViewModel;
             _client = client;
@@ -54,6 +54,7 @@ namespace PeerChat.ViewModel
             SendImageCommand = new RelayCommand(async o => await SendImage());
             CancelImageCommand = new RelayCommand(o => ClearPreview());
             ToggleThemeCommand = new RelayCommand(o => ToggleTheme());
+            SendVideoCommand = new RelayCommand(o => SendVideo());
             Initialize();
         }
 
@@ -62,6 +63,7 @@ namespace PeerChat.ViewModel
         public ICommand SendImageCommand { get; }
         public ICommand CancelImageCommand { get; }
         public ICommand ToggleThemeCommand { get; }
+        public ICommand SendVideoCommand { get; }
 
         public string PeerName
         {
@@ -300,6 +302,10 @@ namespace PeerChat.ViewModel
                         {
                             HandleDisconnect();
                         }
+                        else if ((MessageType)frame.Type == MessageType.Video)
+                        {
+                            HandleVideoChunk(frame.Payload);
+                        }
                     }
                     catch (IOException)
                     {
@@ -391,7 +397,7 @@ namespace PeerChat.ViewModel
             _selectedImageBytes = null;
             _selectedImageName = null;
             PreviewImage = null;
-            IsTextFieldVisible = true; 
+            IsTextFieldVisible = true;
         }
 
         private bool _isDarkMode = false;
@@ -416,7 +422,7 @@ namespace PeerChat.ViewModel
 
         }
 
-        private void AddDebugLog(MessageDirection direction,MessageType type, byte[] payload)
+        private void AddDebugLog(MessageDirection direction, MessageType type, byte[] payload)
         {
             Application.Current.Dispatcher.Invoke(() =>
             {
@@ -445,6 +451,93 @@ namespace PeerChat.ViewModel
 
             }
         }
-       
+
+        public async Task SendVideo()
+        {
+            try
+            {
+                var dialog = new OpenFileDialog()
+                {
+                    Filter = "Video Files(*.mp4;*.avi*.mkv) | *.mp4;*.avi*.mkv"
+                };
+
+                if (dialog.ShowDialog() == true)
+                {
+                    var path = dialog.FileName;
+
+                    if (!File.Exists(path))
+                    {
+                        throw new FileNotFoundException("File not found");
+                    }
+
+                    string videoName = Path.GetFileName(path);
+                    var videoSize = await Task.Run(() => File.ReadAllBytes(path));
+                    bool isFirstChunk = true;
+                    int bytesRead;
+                    byte[] buffer = new byte[1024 * 64];
+                    using (var fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read))
+                        while ((bytesRead = await fs.ReadAsync(buffer, 0, buffer.Length)) > 0)
+                        {
+                            byte[] payLoad;
+
+                            if (isFirstChunk)
+                            {
+                                isFirstChunk = false;
+
+                                byte[] nameBytes = new byte[260];
+                                var fileNameBytes = Encoding.UTF8.GetBytes(videoName);
+
+                                if (nameBytes.Length > 260)
+                                    throw new ArgumentException("Filename exceeds 260 bytes");
+
+                                Array.Copy(fileNameBytes, nameBytes, fileNameBytes.Length);
+
+                                byte[] videoLenght = new byte[8];
+                                videoLenght[0] = (byte)(videoSize.Length >> 56);
+                                videoLenght[1] = (byte)(videoSize.Length >> 48);
+                                videoLenght[2] = (byte)(videoSize.Length >> 40);
+                                videoLenght[3] = (byte)(videoSize.Length >> 32);
+                                videoLenght[4] = (byte)(videoSize.Length >> 24);
+                                videoLenght[5] = (byte)(videoSize.Length >> 16);
+                                videoLenght[6] = (byte)(videoSize.Length >> 8);
+                                videoLenght[7] = (byte)(videoSize.Length);
+
+                                payLoad = new byte[260 + 8 + bytesRead];
+                                Buffer.BlockCopy(nameBytes, 0, payLoad, 0, 260);
+                                Buffer.BlockCopy(videoLenght, 0, payLoad, 260, 8);
+                                Buffer.BlockCopy(buffer, 0, payLoad, 268, bytesRead);
+                            }
+                            else
+                            {
+                                payLoad = new byte[bytesRead];
+                                Buffer.BlockCopy(buffer, 0, payLoad, 0, bytesRead);
+                            }
+                            await _chatService.SendMessageAsync((byte)MessageType.Video, payLoad);
+                            AddDebugLog(MessageDirection.Sent, MessageType.Video, payLoad);
+                        }
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        
+        private bool _isRecivingVideo=false;
+        private void HandleVideoChunk(byte[]payload)
+        {
+            if (!_isRecivingVideo)
+            {
+                _isRecivingVideo = true;
+
+                byte[] nameByte = new byte[260];
+                Array.Copy(payload, nameByte, 260);
+                string fileName = Encoding.UTF8.GetString(nameByte).TrimEnd('\0');
+                MessageBox.Show(fileName);
+            }
+            
+        }
+
     }
 }
