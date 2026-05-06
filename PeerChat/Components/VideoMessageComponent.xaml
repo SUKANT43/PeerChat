@@ -12,7 +12,6 @@
         </Grid.RowDefinitions>
         
         <StackPanel>
-            <ProgressBar Value="20"/>
         </StackPanel>
     </Grid>
     

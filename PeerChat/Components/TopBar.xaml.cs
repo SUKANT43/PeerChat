@@ -60,6 +60,17 @@ namespace PeerChat.Components
             set => SetValue(UserStatusProperty, value);
         }
 
+        public static readonly DependencyProperty ThemeTextProperty = DependencyProperty.Register(
+            nameof(ThemeText),
+            typeof(string),
+            typeof(TopBar));
+
+        public string ThemeText
+        {
+            get => (string)GetValue(ThemeTextProperty);
+            set => SetValue(ThemeTextProperty, value);
+        }
+
 
     }
 }

@@ -13,7 +13,7 @@ namespace PeerChat.Models
         public string FileName{ get; set; }
         public string FilePath { get; set; }
 
-        public DateTime TimeStamp { get; }
+        public String TimeStamp { get; }
         public MessageType Type { get; }
         public MessageDirection Direction { get; }
 
@@ -22,7 +22,7 @@ namespace PeerChat.Models
         {
             Type = type;
             Direction = direction;
-            TimeStamp = DateTime.Now;
+            TimeStamp = DateTime.Now.ToString("HH:mm");
         }
     }
 }

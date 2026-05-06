@@ -44,6 +44,7 @@ namespace PeerChat.Services
             {
                 return true;
             }
+           
             finally
             {
                 listener?.Stop();

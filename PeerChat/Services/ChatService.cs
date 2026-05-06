@@ -29,7 +29,7 @@ namespace PeerChat.Services
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error sending name: {ex.Message}");
+                throw new Exception($"Error sending name: {ex.Message}");
             }
         }
 
@@ -46,8 +46,7 @@ namespace PeerChat.Services
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error receiving name: {ex.Message}");
-                return string.Empty;
+                throw new Exception($"Error receiving name: {ex.Message}");
             }
         }
 
@@ -59,7 +58,7 @@ namespace PeerChat.Services
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error sending message: {ex.Message}");
+                throw new Exception($"Error sending message: {ex.Message}");
             }
         }
 
@@ -71,8 +70,7 @@ namespace PeerChat.Services
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error receiving message: {ex.Message}");
-                return null;
+                throw new Exception($"Error receiving message: {ex.Message}");
             }
         }
     }

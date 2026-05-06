@@ -31,7 +31,8 @@
                                Margin="0,5,0,0"
                                FontSize="10"
                                VerticalAlignment="Center"
-                               HorizontalAlignment="Center"/>
+                               HorizontalAlignment="Center"
+                               Foreground="{DynamicResource TextPrimaryBrush}"/>
                 </StackPanel>
                 <Button Grid.Column="2"
                         Command="{Binding ToggleThemeCommand,RelativeSource={RelativeSource AncestorType=UserControl}}"
@@ -42,7 +43,7 @@
                         Background="Transparent"
                         BorderThickness="0"
                         Cursor="Hand">
-                    <TextBlock Text="🌙" FontSize="18" Foreground="{DynamicResource TextPrimaryBrush}"/>
+                    <TextBlock Text="{Binding ThemeText,RelativeSource={RelativeSource AncestorType=UserControl}}" FontSize="18" Foreground="{DynamicResource TextPrimaryBrush}"/>
                 </Button>
             </Grid>
         </Border>

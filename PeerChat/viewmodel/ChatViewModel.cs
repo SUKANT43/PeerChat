@@ -175,6 +175,7 @@ namespace PeerChat.ViewModel
                 PeerName = await _chatService.ReceiveNameAsync();
                 ChatTitle = $"PeerChat — {_myName} ↔ {_connectionIPAdress} ({PeerName})";
                 UserStatus = "Online";
+                ThemeText = "🌙";
                 StartReceiveLoop();
             }
             catch (Exception ex)
@@ -276,14 +277,14 @@ namespace PeerChat.ViewModel
                                 if (frame.Payload.Length == 0)
                                 {
                                     TypingStatus = $"{PeerName} is typing...";
-                                    Task.Delay(2000).ContinueWith(o =>
-                                    {
-                                        Application.Current.Dispatcher.Invoke(() =>
-                                        {
-                                            if (TypingStatus != null)
-                                                TypingStatus = null;
-                                        });
-                                    });
+                                    //Task.Delay(2000).ContinueWith(o =>
+                                    //{
+                                    //    Application.Current.Dispatcher.Invoke(() =>
+                                    //    {
+                                    //        if (TypingStatus != null)
+                                    //            TypingStatus = null;
+                                    //    });
+                                    //});this leads to continous refresh after 3 seconds
                                 }
                                 else
                                 {
@@ -340,9 +341,7 @@ namespace PeerChat.ViewModel
             IsTextFieldVisible = false;
             PreviewImage = null;
             TypingStatus = null;
-            UserStatus = "Disconected";
-
-
+            UserStatus = "Disconnected";
         }
 
         public async Task OpenImageFolder()
@@ -377,8 +376,9 @@ namespace PeerChat.ViewModel
         }
 
 
-        private async Task SendImage()
+        public async Task SendImage()
         {
+
             try
             {
                 if (_selectedImageBytes == null)
@@ -411,6 +411,16 @@ namespace PeerChat.ViewModel
         }
 
         private bool _isDarkMode = false;
+        private string _themeText;
+        public string ThemeText
+        {
+            get => _themeText;
+            set
+            {
+                _themeText = value;
+                OnPropertyChanged();
+            }
+        }
 
         private void ToggleTheme()
         {
@@ -421,12 +431,12 @@ namespace PeerChat.ViewModel
             if (_isDarkMode)
             {
                 themeDictionary.Source = new Uri("themes/LightTheme.xaml", UriKind.Relative);
-
+                ThemeText = "🌙";
             }
             else
             {
                 themeDictionary.Source = new Uri("themes/DarkTheme.xaml", UriKind.Relative);
-
+                ThemeText = "☀";
             }
             _isDarkMode = !_isDarkMode;
 
@@ -463,7 +473,7 @@ namespace PeerChat.ViewModel
         }
 
 
-        private bool _isRecivingVideo=false;
+        private bool _isRecivingVideo = false;
         public bool IsRecivingVideo
         {
             get => _isRecivingVideo;
