@@ -49,6 +49,17 @@ namespace PeerChat.Components
             set => SetValue(ToggleThemeCommandProperty, value);
         }
 
+        public static readonly DependencyProperty UserStatusProperty = DependencyProperty.Register(
+            nameof(UserStatus),
+            typeof(string),
+            typeof(TopBar));
+
+        public string UserStatus
+        {
+            get => (string)GetValue(UserStatusProperty);
+            set => SetValue(UserStatusProperty, value);
+        }
+
 
     }
 }

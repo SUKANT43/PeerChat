@@ -9,13 +9,11 @@ namespace PeerChat.Models
     {
 
         public string Content{ get; set; }
-
         public BitmapImage ImageData{ get; set; }
-         
         public string FileName{ get; set; }
+        public string FilePath { get; set; }
 
         public DateTime TimeStamp { get; }
-
         public MessageType Type { get; }
         public MessageDirection Direction { get; }
 
