@@ -156,7 +156,7 @@ namespace PeerChat.ViewModel
 
         public bool IsImagePreviewVisible => PreviewImage != null;
 
-      
+
 
         private async void Initialize()
         {
@@ -447,15 +447,8 @@ namespace PeerChat.ViewModel
             try
             {
                 await _chatService.SendMessageAsync((byte)MessageType.Disconnect, Array.Empty<byte>());
-            }
-            catch
-            {
-
-            }
-
-            try
-            {
                 _client?.Close();
+
             }
             catch
             {
@@ -476,20 +469,20 @@ namespace PeerChat.ViewModel
         }
 
         private object _lockReciveObj = new object();
-        private object _lockSendObj = new object();
         private long _totalVideoSize;
         private string _fileName;
         private long _recivedSize;
         private MemoryStream _videoStream;
         private MessageModel _sendMessageModel;
         private MessageModel _reciveMessageModel;
+
         public async Task SendVideo()
         {
             try
             {
                 var dialog = new OpenFileDialog()
                 {
-                    Filter = "Video Files(*.mp4;*.avi*.mkv) | *.mp4;*.avi*.mkv"
+                    Filter = "Video Files(*.mp4;*.avi;*.mkv) | *.mp4;*.avi;*.mkv"
                 };
 
                 if (dialog.ShowDialog() == true)
@@ -506,7 +499,9 @@ namespace PeerChat.ViewModel
                     bool isFirstChunk = true;
                     int bytesRead;
                     byte[] buffer = new byte[1024 * 64];
+
                     using (var fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read))
+                    {
                         while ((bytesRead = await fs.ReadAsync(buffer, 0, buffer.Length)) > 0)
                         {
                             byte[] payLoad;
@@ -517,26 +512,23 @@ namespace PeerChat.ViewModel
 
                                 byte[] nameBytes = new byte[260];
                                 var fileNameBytes = Encoding.UTF8.GetBytes(videoName);
-
-                                if (nameBytes.Length > 260)
-                                    throw new ArgumentException("Filename exceeds 260 bytes");
-
                                 Array.Copy(fileNameBytes, nameBytes, fileNameBytes.Length);
 
-                                byte[] videoLenght = new byte[8];
-                                videoLenght[0] = (byte)(videoSize.Length >> 56);
-                                videoLenght[1] = (byte)(videoSize.Length >> 48);
-                                videoLenght[2] = (byte)(videoSize.Length >> 40);
-                                videoLenght[3] = (byte)(videoSize.Length >> 32);
-                                videoLenght[4] = (byte)(videoSize.Length >> 24);
-                                videoLenght[5] = (byte)(videoSize.Length >> 16);
-                                videoLenght[6] = (byte)(videoSize.Length >> 8);
-                                videoLenght[7] = (byte)(videoSize.Length);
+                                byte[] videoLength = new byte[8];
+                                videoLength[0] = (byte)(videoSize.Length >> 56);
+                                videoLength[1] = (byte)(videoSize.Length >> 48);
+                                videoLength[2] = (byte)(videoSize.Length >> 40);
+                                videoLength[3] = (byte)(videoSize.Length >> 32);
+                                videoLength[4] = (byte)(videoSize.Length >> 24);
+                                videoLength[5] = (byte)(videoSize.Length >> 16);
+                                videoLength[6] = (byte)(videoSize.Length >> 8);
+                                videoLength[7] = (byte)(videoSize.Length);
 
                                 payLoad = new byte[260 + 8 + bytesRead];
                                 Buffer.BlockCopy(nameBytes, 0, payLoad, 0, 260);
-                                Buffer.BlockCopy(videoLenght, 0, payLoad, 260, 8);
+                                Buffer.BlockCopy(videoLength, 0, payLoad, 260, 8);
                                 Buffer.BlockCopy(buffer, 0, payLoad, 268, bytesRead);
+
                                 _sendMessageModel = new MessageModel(MessageType.Video, MessageDirection.Sent)
                                 {
                                     FileName = videoName,
@@ -551,17 +543,23 @@ namespace PeerChat.ViewModel
                                 payLoad = new byte[bytesRead];
                                 Buffer.BlockCopy(buffer, 0, payLoad, 0, bytesRead);
                             }
+
                             await _chatService.SendMessageAsync((byte)MessageType.Video, payLoad);
                             AddDebugLog(MessageDirection.Sent, MessageType.Video, payLoad);
                         }
+                    }
                 }
             }
             catch (Exception ex)
             {
-                MessageList.Remove(_sendMessageModel);
+                if (_sendMessageModel != null)
+                {
+                    Application.Current.Dispatcher.Invoke(() =>
+                    MessageList.Remove(_sendMessageModel));
+                }
+                MessageBox.Show($"Video send failed: {ex.Message}");
             }
         }
-
 
         private void HandleVideoChunk(byte[] payload)
         {
@@ -584,19 +582,32 @@ namespace PeerChat.ViewModel
 
                         _videoStream = new MemoryStream();
                         _videoStream.Write(payload, 268, payload.Length - 268);
-                        _recivedSize += payload.Length - 268;
+                        _recivedSize = payload.Length - 268;
+
                         _reciveMessageModel = new MessageModel(MessageType.Video, MessageDirection.Received)
                         {
-                            FileName = _fileName
+                            FileName = _fileName,
+                            IsReceiving = true,
+                            Progress = (double)_recivedSize / _totalVideoSize * 100
                         };
+
                         Application.Current.Dispatcher.Invoke(() =>
-                        MessageList.Add(_reciveMessageModel));
+                        {
+                            MessageList.Add(_reciveMessageModel);
+                        });
                     }
                     else
                     {
-                        _videoStream.Write(payload, 268, payload.Length - 268);
+                        _videoStream.Write(payload, 0, payload.Length);
                         _recivedSize += payload.Length;
-                        if (_recivedSize == _totalVideoSize)
+
+                        double progress = (double)_recivedSize / _totalVideoSize * 100;
+                        Application.Current.Dispatcher.Invoke(() =>
+                        {
+                            _reciveMessageModel.Progress = progress;
+                        });
+
+                        if (_recivedSize >= _totalVideoSize)
                         {
                             string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
                             string folderPath = Path.Combine(desktopPath, "peer chat");
@@ -609,12 +620,16 @@ namespace PeerChat.ViewModel
                             string timeStamp = DateTime.Now.ToString("yyyyMMdd_HHmmss");
                             string extension = Path.GetExtension(_fileName);
                             string newFileName = $"PeerChat_{timeStamp}{extension}";
-
                             string finalPath = Path.Combine(folderPath, newFileName);
 
                             File.WriteAllBytes(finalPath, _videoStream.ToArray());
 
-                            _reciveMessageModel.FilePath = finalPath;
+                            Application.Current.Dispatcher.Invoke(() =>
+                            {
+                                _reciveMessageModel.FilePath = finalPath;
+                                _reciveMessageModel.IsReceiving = false;
+                                _reciveMessageModel.Progress = 100;
+                            });
 
                             _isRecivingVideo = false;
                             _totalVideoSize = 0;
@@ -626,7 +641,9 @@ namespace PeerChat.ViewModel
                 }
                 catch (Exception ex)
                 {
-                    _videoStream.Dispose();
+                    _videoStream?.Dispose();
+                    _isRecivingVideo = false;
+                    MessageBox.Show($"Error receiving video: {ex.Message}");
                 }
             }
         }

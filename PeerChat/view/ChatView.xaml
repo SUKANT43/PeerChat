@@ -106,11 +106,22 @@
                                             </Image.Style>
                                         </Image>
 
-                                        <!--<ProgressBar Visibility="{Binding IsRecivingVideo,Converter={StaticResource BoolToVisibility}}"
-                                                     Minimum="0"
-                                                     Maximum="100"
-                                                     Height="40"
-                                                     Value="50"/>-->
+                                        <comp:VideoMessageComponent 
+                                                Thumbnail="{Binding VideoThumbnail}"
+                                                Progress="{Binding Progress}"
+                                                IsReceiving="{Binding IsReceiving}">
+                                            <comp:VideoMessageComponent.Style>
+                                                <Style TargetType="comp:VideoMessageComponent">
+                                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding Type}" Value="Video">
+                                                            <Setter Property="Visibility" Value="Visible"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </comp:VideoMessageComponent.Style>
+                                        </comp:VideoMessageComponent>
+
                                         <TextBlock Text="{Binding TimeStamp}" 
                                                    Margin="0,3,0,0"
                                                    FontSize="10"/>

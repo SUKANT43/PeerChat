@@ -17,12 +17,38 @@ namespace PeerChat.Models
         public MessageType Type { get; }
         public MessageDirection Direction { get; }
 
+        private double _progress;
+        public double Progress
+        {
+            get => _progress;
+            set
+            {
+                _progress = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private bool _isReceiving;
+        public bool IsReceiving
+        {
+            get => _isReceiving;
+            set
+            {
+                _isReceiving = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public BitmapImage VideoThumbnail { get; set; }
+
 
         public MessageModel(MessageType type, MessageDirection direction)
         {
             Type = type;
             Direction = direction;
             TimeStamp = DateTime.Now.ToString("HH:mm");
+            Progress = 0;
+            IsReceiving = false;
         }
     }
 }

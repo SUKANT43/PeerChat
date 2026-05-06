@@ -24,5 +24,38 @@ namespace PeerChat.Components
         {
             InitializeComponent();
         }
+
+        public static readonly DependencyProperty ThumbnailProperty =
+            DependencyProperty.Register(nameof(Thumbnail)
+                ,typeof(BitmapImage),
+                typeof(VideoMessageComponent));
+
+        public BitmapImage Thumbnail
+        {
+            get => (BitmapImage)GetValue(ThumbnailProperty);
+            set => SetValue(ThumbnailProperty, value);
+        }
+
+        public static readonly DependencyProperty ProgressProperty = DependencyProperty.Register(
+            nameof(Progress), 
+            typeof(double), 
+            typeof(VideoMessageComponent));
+
+        public double Progress
+        {
+            get => (double)GetValue(ProgressProperty);
+            set => SetValue(ProgressProperty, value);
+        }
+
+        public static readonly DependencyProperty IsReceivingProperty =DependencyProperty.Register(
+            nameof(IsReceiving), 
+            typeof(bool), 
+            typeof(VideoMessageComponent));
+
+        public bool IsReceiving
+        {
+            get => (bool)GetValue(IsReceivingProperty);
+            set => SetValue(IsReceivingProperty, value);
+        }
     }
 }
