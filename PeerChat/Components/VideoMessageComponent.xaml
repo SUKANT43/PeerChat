@@ -23,6 +23,8 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+
             </Grid.RowDefinitions>
 
             <Border Grid.Row="0" 
@@ -58,11 +60,15 @@
                         Visibility="{Binding IsReceiving,Converter={StaticResource InverseBoolConverter}}">
 
                 <Button Style="{StaticResource PrimaryButtonStyle}" 
-                        FontSize="15">
+                        Command="{Binding PlayVideo, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                        FontSize="15"
+                        CommandParameter="{Binding}">
                     <TextBlock Text="▶︎" Margin="8,8,8,8"/>
                 </Button>
                 
             </StackPanel>
+
+            <Button Grid.Row="3" Height="50" Command="{Binding PlayVideo, RelativeSource={RelativeSource AncestorType=UserControl}}"/>
         </Grid>
     </Border>
 </UserControl>

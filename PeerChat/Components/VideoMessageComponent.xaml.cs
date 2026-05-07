@@ -70,5 +70,17 @@ namespace PeerChat.Components
             set => SetValue(IsSendingProperty, value);
         }
 
+
+        public static readonly DependencyProperty PlayVideoProperty =
+            DependencyProperty.Register(
+                nameof(PlayVideo),
+                typeof(ICommand),
+                typeof(VideoMessageComponent));
+
+        public ICommand PlayVideo
+        {
+            get => (ICommand)GetValue(PlayVideoProperty);
+            set => SetValue(PlayVideoProperty, value);
+        }
     }
 }

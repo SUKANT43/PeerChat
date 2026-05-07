@@ -110,7 +110,8 @@
                                                 Thumbnail="{Binding VideoThumbnail}"
                                                 Progress="{Binding Progress}"
                                                 IsReceiving="{Binding IsReceiving}"
-                                                IsSending="{Binding IsSending}">
+                                                IsSending="{Binding IsSending}"
+                                             PlayVideo="{Binding PlayVideoCommand}">
                                             <comp:VideoMessageComponent.Style>
                                                 <Style TargetType="comp:VideoMessageComponent">
                                                     <Setter Property="Visibility" Value="Collapsed"/>
