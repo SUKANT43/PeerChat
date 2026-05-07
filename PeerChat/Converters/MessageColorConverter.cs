@@ -18,7 +18,11 @@ namespace PeerChat.Converters
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            throw new NotImplementedException();
+            var direction = (MessageDirection)value;
+
+            return direction == MessageDirection.Sent
+                ? System.Windows.Application.Current.Resources["ChatSentBrush"]
+                : System.Windows.Application.Current.Resources["ChatReceivedBrush"];
         }
     }
 }

@@ -312,17 +312,7 @@ namespace PeerChat.ViewModel
                             HandleVideoChunk(frame.Payload);
                         }
                     }
-                    catch (IOException)
-                    {
-                        HandleDisconnect();
-                        break;
-                    }
-                    catch (SocketException)
-                    {
-                        HandleDisconnect();
-                        break;
-                    }
-                    catch (Exception)
+                    catch (Exception ex)
                     {
                         HandleDisconnect();
                         break;
@@ -482,15 +472,21 @@ namespace PeerChat.ViewModel
             try
             {
                 _isRunning = false; 
-                _cts.Cancel();
+                
                 await _chatService.SendMessageAsync((byte)MessageType.Disconnect, Array.Empty<byte>());
-                _client?.Close();
-
+                _cts.Cancel();
+                
             }
             catch
             {
 
             }
+
+            try
+            {
+                _client?.Close();
+            }
+            catch { }
         }
 
 
@@ -541,10 +537,10 @@ namespace PeerChat.ViewModel
                     _sentSize = 0;
 
                     BitmapImage thumbnail = null;
-                    await Application.Current.Dispatcher.InvokeAsync(() =>
-                    {
-                        thumbnail = FileHelper.GetVideoThumbNail(path);
-                    });
+                    //await Application.Current.Dispatcher.InvokeAsync(() =>
+                    //{
+                    //    thumbnail = FileHelper.GetVideoThumbNail(path);
+                    //});
 
                     using (var fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read))
                     {
@@ -598,8 +594,11 @@ namespace PeerChat.ViewModel
                                 _sentSize += bytesRead;
                             }
 
-                            if (!_isRunning) break; 
-                            
+                            if (!_isRunning) break;
+
+                            if (_cts.Token.IsCancellationRequested)
+                                break;
+
                             await _chatService.SendMessageAsync((byte)MessageType.Video, payLoad);
 
                             Application.Current.Dispatcher.Invoke(() =>
@@ -725,7 +724,7 @@ namespace PeerChat.ViewModel
                             if (_reciveMessageModel != null)
                             {
                                 _reciveMessageModel.FilePath = finalPath;
-                                _reciveMessageModel.VideoThumbnail = FileHelper.GetVideoThumbNail(_reciveMessageModel.FilePath);
+                                //_reciveMessageModel.VideoThumbnail = FileHelper.GetVideoThumbNail(_reciveMessageModel.FilePath);
                                 _reciveMessageModel.IsReceiving = false;
                                 _reciveMessageModel.Progress = 100;
                             }

@@ -103,7 +103,7 @@ namespace PeerChat.ViewModel
             }
         }
 
-        public string HostDisplayAddress => $"{ConnectionService.GetLocalIPAddress()}:{Port}";
+        public string HostDisplayAddress => ConnectionService.GetLocalIPAddress();
 
         public bool IsWaiting
         {
@@ -181,6 +181,8 @@ namespace PeerChat.ViewModel
         {
             if (!ValidateCommon()) return;
 
+            IsWaiting = true;
+
             if (string.IsNullOrWhiteSpace(ConnectionIPAdress))
             {
                 ErrorMessage = "IP Address is required.";
@@ -200,10 +202,12 @@ namespace PeerChat.ViewModel
                 var cts = new CancellationTokenSource(TimeSpan.FromSeconds(5));
                 var client = await ConnectionService.ConnectAsync(ConnectionIPAdress, Port, cts.Token);
                 _mainViewModel.NavigateToChat(client, Name, Role,ConnectionIPAdress);
+                IsWaiting = false;
             }
             catch (Exception ex)
             {
                 ErrorMessage = ex.Message;
+                IsWaiting = false;
             }
         }
 
