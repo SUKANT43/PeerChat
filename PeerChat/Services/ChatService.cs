@@ -29,7 +29,7 @@ namespace PeerChat.Services
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error sending name: {ex.Message}");
+                throw new Exception($"Error sending: {ex.Message}");
             }
         }
 
@@ -46,7 +46,7 @@ namespace PeerChat.Services
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error receiving name: {ex.Message}");
+                throw new Exception($"Error sending: {ex.Message}");
             }
         }
 
@@ -58,7 +58,7 @@ namespace PeerChat.Services
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error sending message: {ex.Message}");
+                throw new Exception($"Error sending: {ex.Message}");
             }
         }
 
@@ -70,7 +70,7 @@ namespace PeerChat.Services
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error receiving message: {ex.Message}");
+                throw new Exception($"Error sending: {ex.Message}");
             }
         }
     }

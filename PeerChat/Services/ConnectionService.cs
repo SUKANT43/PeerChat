@@ -61,7 +61,7 @@ namespace PeerChat.Services
             }
             catch (Exception ex)
             {
-                throw new Exception($"Failed to start server: {ex.Message}");
+                throw new Exception($"Error sending: {ex.Message}");
             }
         }
 
@@ -73,7 +73,7 @@ namespace PeerChat.Services
             }
             catch (Exception ex)
             {
-                throw new Exception($"Failed to accept client: {ex.Message}");
+                throw new Exception($"Error sending: {ex.Message}");
             }
         }
 
@@ -100,7 +100,7 @@ namespace PeerChat.Services
             catch (Exception ex)
             {
                 client.Close();
-                throw new Exception($"Connection failed: {ex.Message}");
+                throw new Exception($"Error sending: {ex.Message}");
             }
         }
     }

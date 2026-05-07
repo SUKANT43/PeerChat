@@ -109,7 +109,8 @@
                                         <comp:VideoMessageComponent 
                                                 Thumbnail="{Binding VideoThumbnail}"
                                                 Progress="{Binding Progress}"
-                                                IsReceiving="{Binding IsReceiving}">
+                                                IsReceiving="{Binding IsReceiving}"
+                                                IsSending="{Binding IsSending}">
                                             <comp:VideoMessageComponent.Style>
                                                 <Style TargetType="comp:VideoMessageComponent">
                                                     <Setter Property="Visibility" Value="Collapsed"/>
@@ -188,6 +189,7 @@
                     <Button Grid.Column="1"
                             Style="{StaticResource IconButtonStyle}"
                             Command="{Binding SendVideoCommand}"
+                            IsEnabled="{Binding IsSending,Converter={StaticResource InverseBoolConverter}}"
                             ToolTip="Send Image">
                         <TextBlock Text="📹" FontSize="20" Foreground="{DynamicResource TextPrimaryBrush}"/>
                     </Button>

@@ -43,6 +43,14 @@
                          Visibility="{Binding IsReceiving,Converter={StaticResource BoolToVisibility}}"
                          Margin="0,0,0,0"/>
 
+            <ProgressBar Grid.Row="1" 
+                         Height="10" 
+                         Minimum="0" 
+                         Maximum="100" 
+                         Value="{Binding Progress,RelativeSource={RelativeSource AncestorType=UserControl}}"
+                         Visibility="{Binding IsSending,Converter={StaticResource BoolToVisibility}}"
+                         Margin="0,0,0,0"/>
+
             <StackPanel Grid.Row="2" 
                         Orientation="Horizontal" 
                         HorizontalAlignment="Center" 
@@ -53,7 +61,7 @@
                         FontSize="15">
                     <TextBlock Text="▶︎" Margin="8,8,8,8"/>
                 </Button>
-
+                
             </StackPanel>
         </Grid>
     </Border>

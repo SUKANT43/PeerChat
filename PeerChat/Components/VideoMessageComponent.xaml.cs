@@ -57,5 +57,18 @@ namespace PeerChat.Components
             get => (bool)GetValue(IsReceivingProperty);
             set => SetValue(IsReceivingProperty, value);
         }
+
+
+        public static readonly DependencyProperty IsSendingProperty = DependencyProperty.Register(
+            nameof(IsSending),
+            typeof(bool),
+            typeof(VideoMessageComponent));
+
+        public bool IsSending
+        {
+            get => (bool)GetValue(IsSendingProperty);
+            set => SetValue(IsSendingProperty, value);
+        }
+
     }
 }

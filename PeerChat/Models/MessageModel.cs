@@ -8,9 +8,9 @@ namespace PeerChat.Models
     public class MessageModel : Observable
     {
 
-        public string Content{ get; set; }
-        public BitmapImage ImageData{ get; set; }
-        public string FileName{ get; set; }
+        public string Content { get; set; }
+        public BitmapImage ImageData { get; set; }
+        public string FileName { get; set; }
         public string FilePath { get; set; }
 
         public String TimeStamp { get; }
@@ -39,7 +39,28 @@ namespace PeerChat.Models
             }
         }
 
-        public BitmapImage VideoThumbnail { get; set; }
+        private bool _isSending;
+        public bool IsSending
+        {
+            get => _isSending;
+            set
+            {
+                _isSending = value;
+                OnPropertyChanged();
+            }
+        }
+
+
+        private BitmapImage _videoThumbnail;
+        public BitmapImage VideoThumbnail
+        {
+            get => _videoThumbnail;
+            set
+            {
+                _videoThumbnail = value;
+                OnPropertyChanged();
+            }
+        }
 
 
         public MessageModel(MessageType type, MessageDirection direction)
@@ -49,6 +70,7 @@ namespace PeerChat.Models
             TimeStamp = DateTime.Now.ToString("HH:mm");
             Progress = 0;
             IsReceiving = false;
+            IsSending = false;
         }
     }
 }
