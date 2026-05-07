@@ -1,17 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace PeerChat.Components
 {
@@ -26,9 +16,7 @@ namespace PeerChat.Components
         }
 
         public static readonly DependencyProperty ThumbnailProperty =
-            DependencyProperty.Register(nameof(Thumbnail)
-                ,typeof(BitmapImage),
-                typeof(VideoMessageComponent));
+            DependencyProperty.Register(nameof(Thumbnail), typeof(BitmapImage), typeof(VideoMessageComponent));
 
         public BitmapImage Thumbnail
         {
@@ -37,9 +25,10 @@ namespace PeerChat.Components
         }
 
         public static readonly DependencyProperty ProgressProperty = DependencyProperty.Register(
-            nameof(Progress), 
-            typeof(double), 
-            typeof(VideoMessageComponent));
+            nameof(Progress),
+            typeof(double),
+            typeof(VideoMessageComponent),
+            new PropertyMetadata(0.0));
 
         public double Progress
         {
@@ -47,10 +36,11 @@ namespace PeerChat.Components
             set => SetValue(ProgressProperty, value);
         }
 
-        public static readonly DependencyProperty IsReceivingProperty =DependencyProperty.Register(
-            nameof(IsReceiving), 
-            typeof(bool), 
-            typeof(VideoMessageComponent));
+        public static readonly DependencyProperty IsReceivingProperty = DependencyProperty.Register(
+            nameof(IsReceiving),
+            typeof(bool),
+            typeof(VideoMessageComponent),
+            new PropertyMetadata(false));
 
         public bool IsReceiving
         {
@@ -58,18 +48,17 @@ namespace PeerChat.Components
             set => SetValue(IsReceivingProperty, value);
         }
 
-
         public static readonly DependencyProperty IsSendingProperty = DependencyProperty.Register(
             nameof(IsSending),
             typeof(bool),
-            typeof(VideoMessageComponent));
+            typeof(VideoMessageComponent),
+            new PropertyMetadata(false));
 
         public bool IsSending
         {
             get => (bool)GetValue(IsSendingProperty);
             set => SetValue(IsSendingProperty, value);
         }
-
 
         public static readonly DependencyProperty PlayVideoProperty =
             DependencyProperty.Register(
@@ -81,6 +70,19 @@ namespace PeerChat.Components
         {
             get => (ICommand)GetValue(PlayVideoProperty);
             set => SetValue(PlayVideoProperty, value);
+        }
+
+        public static readonly DependencyProperty FileNameProperty =
+            DependencyProperty.Register(
+                nameof(FileName),
+                typeof(string),
+                typeof(VideoMessageComponent),
+                new PropertyMetadata(""));
+
+        public string FileName
+        {
+            get => (string)GetValue(FileNameProperty);
+            set => SetValue(FileNameProperty, value);
         }
     }
 }

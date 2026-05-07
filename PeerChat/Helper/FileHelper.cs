@@ -58,52 +58,5 @@ namespace PeerChat.Helper
                 return image;
             }
         }
-
-        public static BitmapImage GetVideoThumbNail(string path)
-        {
-            var player = new MediaPlayer();
-            player.Open(new Uri(path));
-            player.Play();
-            player.Pause();
-            Thread.Sleep(300);
-
-            if (player.NaturalVideoWidth == 0 || player.NaturalVideoHeight == 0)
-                return null;
-
-            var visual = new DrawingVisual();
-            using (var dc = visual.RenderOpen())
-            {
-                dc.DrawVideo(player, new Rect(0, 0, 320, 180));
-            }
-
-            var bitmap = new RenderTargetBitmap( 320,180,96,96,PixelFormats.Pbgra32);
-
-            bitmap.Render(visual);
-
-            player.Close();
-
-            return ConvertToBitmapImage(bitmap);
-        }
-
-        private static BitmapImage ConvertToBitmapImage(BitmapSource source)
-        {
-            var encoder = new PngBitmapEncoder();
-            encoder.Frames.Add(BitmapFrame.Create(source));
-
-            using (var ms = new MemoryStream())
-            {
-                encoder.Save(ms);
-                ms.Position = 0;
-
-                var img = new BitmapImage();
-                img.BeginInit();
-                img.CacheOption = BitmapCacheOption.OnLoad;
-                img.StreamSource = ms;
-                img.EndInit();
-                img.Freeze();
-
-                return img;
-            }
-        }
     }
 }

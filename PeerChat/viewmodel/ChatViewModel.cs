@@ -90,20 +90,9 @@ namespace PeerChat.ViewModel
                     process.Start();
                     process.Dispose();
                 }
-                else
-                {
-                    Application.Current.Dispatcher.Invoke(() =>
-                    {
-                        MessageBox.Show("Video file not found or path is invalid.", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
-                    });
-                }
             }
             catch (Exception ex)
             {
-                Application.Current.Dispatcher.Invoke(() =>
-                {
-                    MessageBox.Show($"Failed to play video: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                });
             }
         }
 
@@ -223,10 +212,6 @@ namespace PeerChat.ViewModel
             }
             catch (Exception ex)
             {
-                Application.Current.Dispatcher.Invoke(() =>
-                {
-                    MessageBox.Show($"Initialization error: {ex.Message}");
-                });
                 HandleDisconnect();
             }
         }
@@ -256,10 +241,6 @@ namespace PeerChat.ViewModel
             }
             catch (Exception ex)
             {
-                Application.Current.Dispatcher.Invoke(() =>
-                {
-                    MessageBox.Show($"Send failed: {ex.Message}");
-                });
                 HandleDisconnect();
             }
         }
@@ -465,10 +446,7 @@ namespace PeerChat.ViewModel
             }
             catch (Exception ex)
             {
-                Application.Current.Dispatcher.Invoke(() =>
-                {
-                    MessageBox.Show($"File error: {ex.Message}");
-                });
+              
             }
         }
 
@@ -496,10 +474,7 @@ namespace PeerChat.ViewModel
             }
             catch (Exception ex)
             {
-                Application.Current.Dispatcher.Invoke(() =>
-                {
-                    MessageBox.Show($"Image send failed: {ex.Message}");
-                });
+                
             }
         }
 
@@ -597,6 +572,16 @@ namespace PeerChat.ViewModel
         private MessageModel _reciveMessageModel;
         private long _sentSize;
 
+        private bool _isSending;
+        public bool IsSending
+        {
+            get => _isSending;
+            set
+            {
+                _isSending = value;
+                OnPropertyChanged();
+            }
+        }
         public async Task SendVideo()
         {
             CancellationTokenSource sendCts = null;
@@ -623,11 +608,7 @@ namespace PeerChat.ViewModel
                         return;
 
                     BitmapImage thumbnail = null;
-                    try
-                    {
-                        thumbnail = FileHelper.GetVideoThumbNail(path);
-                    }
-                    catch { thumbnail = null; }
+
 
                     MessageModel sendingModel = null;
                     Application.Current.Dispatcher.Invoke(() =>
@@ -655,6 +636,8 @@ namespace PeerChat.ViewModel
 
                         using (var fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read, buffer.Length, true))
                         {
+                            IsSending = true;
+
                             while (_isRunning && (bytesRead = await fs.ReadAsync(buffer, 0, buffer.Length, sendCts.Token)) > 0)
                             {
                                 if (!_isRunning || sendCts.Token.IsCancellationRequested)
@@ -712,6 +695,8 @@ namespace PeerChat.ViewModel
                                             _sendMessageModel.Progress = 100;
                                         }
                                     });
+                                    IsSending =false;
+
                                 }
 
                                 AddDebugLog(MessageDirection.Sent, MessageType.Video, payLoad);
@@ -728,6 +713,7 @@ namespace PeerChat.ViewModel
                                         _sendMessageModel.Progress = 100;
                                     }
                                     _sendMessageModel = null;
+                                    _isSending=false;
                                 });
                     }, sendCts.Token);
                 }
@@ -740,6 +726,8 @@ namespace PeerChat.ViewModel
                         MessageList.Remove(_sendMessageModel);
                     _sendMessageModel = null;
                 });
+                IsSending = false;
+
             }
             catch (Exception ex)
             {
@@ -748,7 +736,6 @@ namespace PeerChat.ViewModel
                     if (_sendMessageModel != null && MessageList.Contains(_sendMessageModel))
                         MessageList.Remove(_sendMessageModel);
                     _sendMessageModel = null;
-                    MessageBox.Show($"Video send failed: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 });
                 await DisconnectAsync();
             }

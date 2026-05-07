@@ -27,7 +27,7 @@
 
                     <StackPanel>
                         <TextBlock FontSize="11"
-                                   Foreground="{DynamicResource TextSecondaryBrush}"
+                                   Foreground="{DynamicResource DynamicResource TextTertiaryBrush}"
                                    Margin="0,0,0,4">
                             <TextBlock.Style>
                                 <Style TargetType="TextBlock">
@@ -200,6 +200,17 @@
                         <TextBlock Text="📷" FontSize="20" Foreground="{DynamicResource AccentBrush}"/>
                     </Button>
 
+                    <!--<Button Style="{StaticResource SendButtonStyle}"
+                            Grid.Column="0">
+                        <TextBlock Text="+"
+                                   Foreground="White"
+                                   FontSize="25"
+                                   FontWeight="Bold"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Center"
+                                   Margin="0,0,0,5"/>
+                    </Button>-->
+
                     <Button Grid.Column="1"
                             Style="{StaticResource IconButtonStyle}"
                             Command="{Binding SendVideoCommand}"
@@ -211,19 +222,46 @@
                         <TextBlock Text="📹" FontSize="20" Foreground="{DynamicResource AccentBrush}"/>
                     </Button>
 
+                   
+
                     <TextBox Grid.Column="2"
-                             MaxHeight="100"
-                             Text="{Binding Message, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                             Style="{StaticResource ModernTextBoxStyle}">       
+                             Text="{Binding Message, UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"
+                             AcceptsReturn="True"
+                             TextWrapping="Wrap"
+                             MinHeight="40" 
+                             Height="Auto"
+                             VerticalScrollBarVisibility="Auto"
+                             Padding="12,10"
+                             VerticalContentAlignment="Top"
+                             Background="{DynamicResource BackgroundBrush}"
+                             Foreground="{DynamicResource TextPrimaryBrush}"
+                             BorderBrush="{DynamicResource BorderBrush}"
+                             BorderThickness="1"
+                             Margin="5,0">
 
                         <TextBox.InputBindings>
                             <KeyBinding Key="Enter" Command="{Binding SendMessageCommand}"/>
                         </TextBox.InputBindings>
+
+                        <TextBox.Template>
+                            <ControlTemplate TargetType="TextBox">
+                                <Border CornerRadius="20"
+                                        BorderBrush="{TemplateBinding BorderBrush}"
+                                        BorderThickness="1"
+                                        Background="{TemplateBinding Background}">
+                                    <ScrollViewer x:Name="PART_ContentHost"
+                                                  Margin="10,0"/>
+
+                                </Border>
+                            </ControlTemplate>
+                        </TextBox.Template>
                     </TextBox>
+
 
                     <Button Grid.Column="3"
                             Command="{Binding SendMessageCommand}"
                             Style="{StaticResource SendButtonStyle}"
+                            Visibility="{Binding IsVisible, Converter={StaticResource BoolToVisibility}}"
                             Width="44"
                             Height="44"
                             Margin="8,0,0,0"

@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:conv="clr-namespace:PeerChat.Converters"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="400"
+             d:DesignHeight="200" d:DesignWidth="300"
              x:Name="VideoControl">
 
     <UserControl.Resources>
@@ -13,78 +13,138 @@
         <BooleanToVisibilityConverter x:Key="BoolToVisibility"/>
     </UserControl.Resources>
 
-    <Border CornerRadius="8" 
+    <Border CornerRadius="12" 
+            Background="{DynamicResource SurfaceBrush}"
             BorderBrush="{DynamicResource BorderBrush}" 
-            BorderThickness="1">
+            BorderThickness="1"
+            Padding="0,0,0,8">
 
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
             <!-- Thumbnail and Play Button Area -->
             <Border Grid.Row="0" 
-                    Background="{DynamicResource SurfaceBrush}" 
-                    CornerRadius="8,8,0,0">
+                    Background="{DynamicResource SurfaceElevatedBrush}" 
+                    CornerRadius="12,12,0,0">
+
                 <Grid>
                     <Image Source="{Binding Thumbnail, ElementName=VideoControl}"
                            Stretch="Uniform"
-                           MaxHeight="200"
-                           Margin="5"/>
+                           MaxHeight="160"
+                           MinHeight="100"
+                           Margin="0">
 
-                    <!-- Play Button - Only show when not receiving/sending -->
+                        <Image.Style>
+                            <Style TargetType="Image">
+                                <Setter Property="Opacity" Value="0.9"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsReceiving, ElementName=VideoControl}" Value="True">
+                                        <Setter Property="Opacity" Value="0.6"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding IsSending, ElementName=VideoControl}" Value="True">
+                                        <Setter Property="Opacity" Value="0.6"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Image.Style>
+                    </Image>
+
+                    <!-- Play Button -->
                     <Button Command="{Binding PlayVideo, ElementName=VideoControl}"
                             CommandParameter="{Binding DataContext, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                            Width="50"
-                            Height="50"
+                            Width="48"
+                            Height="48"
                             HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Visibility="{Binding IsReceiving, ElementName=VideoControl, Converter={StaticResource InverseBoolConverter}}">
+                            VerticalAlignment="Center">
                         <Button.Template>
                             <ControlTemplate TargetType="Button">
-                                <Border Background="#80000000" CornerRadius="25">
+                                <Border Background="#CC000000" 
+                                        CornerRadius="24">
                                     <TextBlock Text="▶" 
-                                               FontSize="28" 
+                                               FontSize="22" 
                                                Foreground="White"
+                                               FontWeight="Bold"
                                                HorizontalAlignment="Center"
-                                               VerticalAlignment="Center"/>
+                                               VerticalAlignment="Center"
+                                               Margin="2,0,0,0"/>
                                 </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#DD000000"/>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
                             </ControlTemplate>
                         </Button.Template>
                     </Button>
-
-                    <!-- Receiving Overlay -->
-                    <Border Background="#80000000"
-                            Visibility="{Binding IsReceiving, ElementName=VideoControl, Converter={StaticResource BoolToVisibility}}">
-                        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-                            <TextBlock Text="⏳" FontSize="30" Foreground="White"/>
-                            <TextBlock Text="Receiving..." Foreground="White" Margin="0,5,0,0"/>
-                        </StackPanel>
-                    </Border>
                 </Grid>
             </Border>
 
-            <!-- Progress Bar -->
-            <ProgressBar Grid.Row="1" 
-                         Height="4" 
-                         Minimum="0" 
-                         Maximum="100" 
-                         Value="{Binding Progress, ElementName=VideoControl}"
-                         Visibility="{Binding IsReceiving, ElementName=VideoControl, Converter={StaticResource BoolToVisibility}}"
-                         Foreground="{DynamicResource PrimaryBrush}"
-                         Background="{DynamicResource BorderBrush}"
-                         Margin="0,5,0,5"/>
+            <!-- Progress Bar Section -->
+            <Grid Grid.Row="1" Margin="12,10,12,0">
+                <!-- Progress Bar -->
+                <ProgressBar Height="4" 
+                             Minimum="0" 
+                             Maximum="100" 
+                             Value="{Binding Progress, ElementName=VideoControl}"
+                             Visibility="{Binding IsReceiving, ElementName=VideoControl, Converter={StaticResource BoolToVisibility}}"
+                             Foreground="{DynamicResource AccentBrush}"
+                             Background="{DynamicResource BorderBrush}"/>
 
-            <ProgressBar Grid.Row="1" 
-                         Height="4" 
-                         Minimum="0" 
-                         Maximum="100" 
-                         Value="{Binding Progress, ElementName=VideoControl}"
-                         Visibility="{Binding IsSending, ElementName=VideoControl, Converter={StaticResource BoolToVisibility}}"
-                         Foreground="{DynamicResource PrimaryBrush}"
-                         Background="{DynamicResource BorderBrush}"
-                         Margin="0,5,0,5"/>
+                <ProgressBar Height="4" 
+                             Minimum="0" 
+                             Maximum="100" 
+                             Value="{Binding Progress, ElementName=VideoControl}"
+                             Visibility="{Binding IsSending, ElementName=VideoControl, Converter={StaticResource BoolToVisibility}}"
+                             Foreground="{DynamicResource AccentBrush}"
+                             Background="{DynamicResource BorderBrush}"/>
+
+                <!-- Progress Text -->
+                <TextBlock Text="{Binding Progress, ElementName=VideoControl, StringFormat={}{0:0}%}"
+                           FontSize="11"
+                           FontWeight="SemiBold"
+                           Foreground="{DynamicResource AccentBrush}"
+                           HorizontalAlignment="Right"
+                           Margin="0,8,0,0"
+                           Visibility="{Binding IsReceiving, ElementName=VideoControl, Converter={StaticResource BoolToVisibility}}"/>
+
+                <TextBlock Text="{Binding Progress, ElementName=VideoControl, StringFormat={}{0:0}%}"
+                           FontSize="11"
+                           FontWeight="SemiBold"
+                           Foreground="{DynamicResource AccentBrush}"
+                           HorizontalAlignment="Right"
+                           Margin="0,8,0,0"
+                           Visibility="{Binding IsSending, ElementName=VideoControl, Converter={StaticResource BoolToVisibility}}"/>
+            </Grid>
+
+            <!-- File Name -->
+            <TextBlock Grid.Row="2"
+                       Text="{Binding FileName, ElementName=VideoControl}"
+                       FontSize="11"
+                       Foreground="{DynamicResource TextTertiaryBrush}"
+                       HorizontalAlignment="Center"
+                       Margin="12,8,12,4"
+                       TextWrapping="NoWrap"
+                       TextTrimming="CharacterEllipsis"
+                       MaxWidth="260">
+
+                <TextBlock.Style>
+                    <Style TargetType="TextBlock">
+                        <Setter Property="Visibility" Value="Visible"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding FileName, ElementName=VideoControl}" Value="">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding FileName, ElementName=VideoControl}" Value="{x:Null}">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
         </Grid>
     </Border>
 </UserControl>

@@ -98,18 +98,19 @@
                                          Style="{StaticResource ModernTextBoxStyle}"
                                          IsReadOnly="True"
                                          Height="40"/>
+
                                 <Button Grid.Column="1"
-                                        Command="{Binding CopyAddressCommand}"
-                                        Style="{StaticResource IconButtonStyle}"
-                                               Background="{DynamicResource TextSecondaryBrush}"
-                                        
-                                        ToolTip="Copy IP and Port"
-                                        Cursor="Hand"
-                                        Width="40"
-                                        Margin="8,0,0,0">
+                    Style="{StaticResource IconButtonStyle}"
+                    Command="{Binding CopyAddressCommand}"
+                    ToolTip="Logout"
+                    Width="40"
+                                        Margin="8,0,0,0"
+                    Height="36">
+                                    
                                     <TextBlock Text="📋"
                                                VerticalAlignment="Center"
                                                HorizontalAlignment="Center"
+                                               Foreground="{DynamicResource TextPrimaryBrush}"
                                                FontSize="18"/>
                                 </Button>
                             </Grid>
