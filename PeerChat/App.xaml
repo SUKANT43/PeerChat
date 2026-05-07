@@ -17,7 +17,7 @@
             </DataTemplate>
 
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="Themes/LightTheme.xaml"/>
+                <ResourceDictionary Source="Themes/DarkTheme.xaml"/>
                 <ResourceDictionary Source="Themes/ButtonStyle.xaml"/>
                 <ResourceDictionary Source="Themes/TextBoxStyle.xaml"/>
             </ResourceDictionary.MergedDictionaries>

@@ -14,6 +14,101 @@
         <conv:MessageTextColorConverter x:Key="TextColorConverter"/>
         <BooleanToVisibilityConverter x:Key="BoolToVisibility"/>
         <conv:InverseBoolConverter x:Key="InverseBoolConverter"/>
+
+        <conv:StatusColorConverter x:Key="StatusColorConverter"/>
+
+        <DataTemplate x:Key="MessageTemplate">
+            <Grid Margin="8,4">
+                <Border Padding="12,8"
+                        MaxWidth="400"
+                        CornerRadius="16"
+                        HorizontalAlignment="{Binding Direction, Converter={StaticResource AlignConverter}}"
+                        Background="{Binding Direction, Converter={StaticResource ColorConverter}}">
+
+                    <StackPanel>
+                        <TextBlock FontSize="11"
+                                   Foreground="{DynamicResource TextSecondaryBrush}"
+                                   Margin="0,0,0,4">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Text" Value="{Binding FileName}"/>
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Type}" Value="Image">
+                                            <Setter Property="Visibility" Value="Visible"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Type}" Value="Video">
+                                            <Setter Property="Visibility" Value="Visible"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+
+                        <TextBlock Text="{Binding Content}"
+                                   FontWeight="Normal"
+                                   TextWrapping="Wrap"
+                                   FontSize="14">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                    <Setter Property="Foreground" Value="{Binding Direction, Converter={StaticResource TextColorConverter}}"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Type}" Value="Text">
+                                            <Setter Property="Visibility" Value="Visible"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+
+                        <Image MaxWidth="300"
+                               MaxHeight="200"
+                               MouseLeftButtonUp="ImageClick"
+                               Stretch="Uniform"
+                               Margin="0,4,0,0"
+                               Cursor="Hand"
+                               Source="{Binding ImageData}">
+                            <Image.Style>
+                                <Style TargetType="Image">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Type}" Value="Image">
+                                            <Setter Property="Visibility" Value="Visible"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Image.Style>
+                        </Image>
+
+                        <comp:VideoMessageComponent 
+                                Thumbnail="{Binding VideoThumbnail}"
+                                Progress="{Binding Progress}"
+                                IsReceiving="{Binding IsReceiving}"
+                                IsSending="{Binding IsSending}"
+                                PlayVideo="{Binding DataContext.PlayVideoCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                DataContext="{Binding}">
+                            <comp:VideoMessageComponent.Style>
+                                <Style TargetType="comp:VideoMessageComponent">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Type}" Value="Video">
+                                            <Setter Property="Visibility" Value="Visible"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </comp:VideoMessageComponent.Style>
+                        </comp:VideoMessageComponent>
+
+                        <TextBlock Text="{Binding TimeStamp}" 
+                                   Margin="0,4,0,0"
+                                   FontSize="10"
+                                   Foreground="{DynamicResource TextTertiaryBrush}"
+                                   HorizontalAlignment="Right"/>
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </DataTemplate>
     </UserControl.Resources>
 
     <Grid Background="{DynamicResource BackgroundBrush}">
@@ -24,155 +119,70 @@
         </Grid.RowDefinitions>
 
         <comp:TopBar Grid.Row="0"
-                     PeerName="{Binding PeerName}" 
-                     ToggleThemeCommand="{Binding ToggleThemeCommand}" 
-                     ThemeText="{Binding ThemeText}"
-                     UserStatus="{Binding UserStatus}"/>
-
+             PeerName="{Binding PeerName}" 
+             ToggleThemeCommand="{Binding ToggleThemeCommand}" 
+             UserStatus="{Binding UserStatus}"
+             ThemeText="{Binding ThemeText}"
+              Logout="{Binding LogoutCommand}"/>
         <Border Grid.Row="1"
-                Margin="10,10,10,5"
-                Padding="8"
-                Background="{DynamicResource SurfaceBrush}"
-                BorderBrush="{DynamicResource BorderBrush}"
-                BorderThickness="1"
+                Margin="12,12,12,8"
+                Background="Transparent"
                 CornerRadius="16">
 
             <ScrollViewer x:Name="MessageScrollViewer"
-                          VerticalScrollBarVisibility="Auto">
-                
+                          VerticalScrollBarVisibility="Auto"
+                          HorizontalScrollBarVisibility="Disabled">
 
-                <ItemsControl ItemsSource="{Binding MessageList}">
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <Grid Margin="8,4">
-                                <Border Padding="10,8"
-                                        MaxWidth="380"
-                                        CornerRadius="14"
-                                        HorizontalAlignment="{Binding Direction, Converter={StaticResource AlignConverter}}"
-                                        Background="{Binding Direction, Converter={StaticResource ColorConverter}}">
-
-                                    <StackPanel>
-                                        <TextBlock FontSize="11"
-                                                   Foreground="{DynamicResource TextSecondaryBrush}"
-                                                   Margin="0,0,0,5">
-                                            <TextBlock.Style>
-                                                <Style TargetType="TextBlock">
-                                                    <Setter Property="Text" Value="{Binding FileName}"/>
-                                                    <Setter Property="Visibility" Value="Collapsed"/>
-                                                    <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding Type}" Value="Image">
-                                                            <Setter Property="Visibility" Value="Visible"/>
-                                                        </DataTrigger>
-                                                        <DataTrigger Binding="{Binding Type}" Value="Video">
-                                                            <Setter Property="Visibility" Value="Visible"/>
-                                                        </DataTrigger>
-                                                    </Style.Triggers>
-                                                </Style>
-                                            </TextBlock.Style>
-                                        </TextBlock>
-
-                                        <TextBlock Text="{Binding Content}"
-                                                   FontWeight="Normal"
-                                                   TextWrapping="Wrap"
-                                                   FontSize="14"
-                                                   Foreground="{Binding Direction,Converter={StaticResource TextColorConverter}}">
-                                            <TextBlock.Style>
-                                                <Style TargetType="TextBlock">
-                                                    <Setter Property="Visibility" Value="Collapsed"/>
-                                                    <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding Type}" Value="Text">
-                                                            <Setter Property="Visibility" Value="Visible"/>
-                                                        </DataTrigger>
-                                                    </Style.Triggers>
-                                                </Style>
-                                            </TextBlock.Style>
-                                        </TextBlock>
-
-                                        <Image MaxWidth="320"
-                                               MouseLeftButtonUp="ImageClick"
-                                               Stretch="Uniform"
-                                               Margin="0,5,0,0"
-                                               Cursor="Hand"
-                                               Source="{Binding ImageData}">
-                                            <Image.Style>
-                                                <Style TargetType="Image">
-                                                    <Setter Property="Visibility" Value="Collapsed"/>
-                                                    <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding Type}" Value="Image">
-                                                            <Setter Property="Visibility" Value="Visible"/>
-                                                        </DataTrigger>
-                                                    </Style.Triggers>
-                                                </Style>
-                                            </Image.Style>
-                                        </Image>
-
-                                        <comp:VideoMessageComponent 
-                                                Thumbnail="{Binding VideoThumbnail}"
-                                                Progress="{Binding Progress}"
-                                                IsReceiving="{Binding IsReceiving}"
-                                                IsSending="{Binding IsSending}"
-                                             PlayVideo="{Binding PlayVideoCommand}">
-                                            <comp:VideoMessageComponent.Style>
-                                                <Style TargetType="comp:VideoMessageComponent">
-                                                    <Setter Property="Visibility" Value="Collapsed"/>
-                                                    <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding Type}" Value="Video">
-                                                            <Setter Property="Visibility" Value="Visible"/>
-                                                        </DataTrigger>
-                                                    </Style.Triggers>
-                                                </Style>
-                                            </comp:VideoMessageComponent.Style>
-                                        </comp:VideoMessageComponent>
-
-                                        <TextBlock Text="{Binding TimeStamp}" 
-                                                   Margin="0,3,0,0"
-                                                   FontSize="10"/>
-                                    </StackPanel>
-                                </Border>
-                            </Grid>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
+                <ItemsControl ItemsSource="{Binding MessageList}"
+                              ItemTemplate="{StaticResource MessageTemplate}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Vertical"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
                 </ItemsControl>
             </ScrollViewer>
         </Border>
 
         <Border Grid.Row="2"
-                Padding="10"
+                Margin="12,0,12,12"
+                Padding="12,10"
                 Background="{DynamicResource SurfaceBrush}"
                 BorderBrush="{DynamicResource BorderBrush}"
-                CornerRadius="16"
-                BorderThickness="1,1,1,0">
+                CornerRadius="24"
+                BorderThickness="1">
 
             <StackPanel>
                 <Border Background="{DynamicResource BackgroundBrush}"
-                        Margin="5,5,5,10"
-                        Padding="10"
-                        CornerRadius="12"
+                        Margin="0,0,0,10"
+                        Padding="12"
+                        CornerRadius="16"
                         Visibility="{Binding IsImagePreviewVisible, Converter={StaticResource BoolToVisibility}}">
 
                     <StackPanel>
                         <Image Source="{Binding PreviewImage}"
-                               MaxHeight="150"
+                               MaxHeight="160"
                                Stretch="Uniform"
-                               Margin="0,0,0,10"/>
+                               Margin="0,0,0,12"/>
 
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                        <StackPanel Orientation="Horizontal" 
+                                    HorizontalAlignment="Right">
                             <Button Content="Cancel"
                                     Command="{Binding CancelImageCommand}"
-                                    Style="{StaticResource SecondaryButtonStyle}"
-                                    Width="80"
-                                    Height="30"
+                                    Style="{StaticResource DangerButton}"
+                                    Width="90"
+                                    Height="34"
                                     Margin="0,0,10,0"/>
                             <Button Content="Send"
                                     Command="{Binding SendImageCommand}"
                                     Style="{StaticResource PrimaryButtonStyle}"
-                                    Width="80"
-                                    Height="30"/>
+                                    Width="90"
+                                    Height="34"/>
                         </StackPanel>
                     </StackPanel>
                 </Border>
 
-                <Grid Visibility="{Binding IsTextFieldVisible,Converter={StaticResource BoolToVisibility},Mode=TwoWay}">
+                <Grid Visibility="{Binding IsTextFieldVisible, Converter={StaticResource BoolToVisibility}}">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="Auto"/>
@@ -183,80 +193,70 @@
                     <Button Grid.Column="0"
                             Style="{StaticResource IconButtonStyle}"
                             Command="{Binding OpenImageFolderCommand}"
-                            ToolTip="Send Image">
-                        <TextBlock Text="📷" FontSize="20" Foreground="{DynamicResource TextPrimaryBrush}"/>
+                            ToolTip="Send Image"
+                            Width="40"
+                            Height="40"
+                            Margin="0,0,4,0">
+                        <TextBlock Text="📷" FontSize="20" Foreground="{DynamicResource AccentBrush}"/>
                     </Button>
 
                     <Button Grid.Column="1"
                             Style="{StaticResource IconButtonStyle}"
                             Command="{Binding SendVideoCommand}"
-                            IsEnabled="{Binding IsSending,Converter={StaticResource InverseBoolConverter}}"
-                            ToolTip="Send Image">
-                        <TextBlock Text="📹" FontSize="20" Foreground="{DynamicResource TextPrimaryBrush}"/>
+                            IsEnabled="{Binding IsSending, Converter={StaticResource InverseBoolConverter}}"
+                            ToolTip="Send Video"
+                            Width="40"
+                            Height="40"
+                            Margin="0,0,8,0">
+                        <TextBlock Text="📹" FontSize="20" Foreground="{DynamicResource AccentBrush}"/>
                     </Button>
 
-
-
                     <TextBox Grid.Column="2"
-                             Text="{Binding Message, UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"
-                             AcceptsReturn="True"
-                             TextWrapping="Wrap"
-                             MinHeight="40" 
-                             Height="Auto"
-                             VerticalScrollBarVisibility="Auto"
-                             Padding="12,10"
-                             VerticalContentAlignment="Top"
-                             Background="{DynamicResource BackgroundBrush}"
-                             Foreground="{DynamicResource TextPrimaryBrush}"
-                             BorderBrush="{DynamicResource BorderBrush}"
-                             BorderThickness="1"
-                             Margin="5,0">
+                             MaxHeight="100"
+                             Text="{Binding Message, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                             Style="{StaticResource ModernTextBoxStyle}">       
 
                         <TextBox.InputBindings>
                             <KeyBinding Key="Enter" Command="{Binding SendMessageCommand}"/>
                         </TextBox.InputBindings>
-
-                        <TextBox.Template>
-                            <ControlTemplate TargetType="TextBox">
-                                <Border CornerRadius="20"
-                                        BorderBrush="{TemplateBinding BorderBrush}"
-                                        BorderThickness="1"
-                                        Background="{TemplateBinding Background}">
-                                    <ScrollViewer x:Name="PART_ContentHost"
-                                                  Margin="10,0"/>
-
-                                </Border>
-                            </ControlTemplate>
-                        </TextBox.Template>
                     </TextBox>
 
                     <Button Grid.Column="3"
                             Command="{Binding SendMessageCommand}"
-                            Visibility="{Binding IsVisible, Converter={StaticResource BoolToVisibility}}"
-                            Style="{StaticResource SendButtonStyle}">
-                        <TextBlock Text="➤" FontSize="20" Foreground="White"/>
+                            Style="{StaticResource SendButtonStyle}"
+                            Width="44"
+                            Height="44"
+                            Margin="8,0,0,0"
+                            ToolTip="Send Message (Enter)">
+                        <TextBlock Text="➤" 
+                                   FontSize="20" 
+                                   Foreground="White"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Center"/>
                     </Button>
                 </Grid>
 
                 <TextBlock Text="{Binding TypingStatus}"
                            FontSize="11"
                            FontStyle="Italic"
-                           Foreground="{DynamicResource TextFadeBrush}"
-                           Margin="40,5,0,0"
+                           Foreground="{DynamicResource TextSecondaryBrush}"
+                           Margin="8,6,0,0"
                            Visibility="{Binding IsTypingVisible, Converter={StaticResource BoolToVisibility}}"/>
 
-                <CheckBox Content="Debug Log"  
-                          Margin="20,5,0,0"
-                          Foreground="{DynamicResource TextPrimaryBrush}"
-                          FontWeight="Bold"
-                          IsChecked="{Binding IsDebugConsoleVisible,Mode=TwoWay}"/>
+             
 
+                <Button Style="{StaticResource IconButtonStyle}"
+                        Content="📋 Action Log" Width="100" 
+                        Foreground="{DynamicResource TextSecondaryBrush}"
+                        HorizontalAlignment="Left"
+                        Command="{Binding ShowDebuggerCommand}"
+                        Background="Transparent"/>
 
-                <comp:DebugLogPanel Margin="0,10,0,0" 
+                <comp:DebugLogPanel Margin="0,8,0,0" 
                                     Height="200" 
                                     DebugList="{Binding DebugLogList}" 
-                                    Visibility="{Binding IsDebugConsoleVisible,Converter={StaticResource BoolToVisibility}}"/>
-
+                                    Visibility="{Binding IsDebugConsoleVisible,
+                                    Converter={StaticResource BoolToVisibility}}"/>
             </StackPanel>
         </Border>
     </Grid>

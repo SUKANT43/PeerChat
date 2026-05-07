@@ -1,160 +1,218 @@
 ﻿<UserControl x:Class="PeerChat.View.ConnectionView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:conv="clr-namespace:PeerChat.Converters"
-             mc:Ignorable="d" >
+             mc:Ignorable="d"
+             d:DesignHeight="600" d:DesignWidth="1000">
 
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVisibility"/>
         <conv:InverseBoolConverter x:Key="BoolInverseConverter"/>
-       
     </UserControl.Resources>
 
     <Grid Background="{DynamicResource BackgroundBrush}">
-        <Border Width="400"
-                Padding="25"
-                CornerRadius="20"
+        <Border Width="950"
+                Height="560"
+                CornerRadius="28"
                 Background="{DynamicResource SurfaceBrush}"
                 BorderBrush="{DynamicResource BorderBrush}"
                 BorderThickness="1"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center">
 
-            <StackPanel>
-                <TextBlock Text="PeerChat"
-                           FontSize="28"
-                           FontWeight="Bold"
-                           Margin="0,0,0,5"
-                           HorizontalAlignment="Center"
-                           Foreground="{DynamicResource AccentBrush}"/>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="420"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
 
-                <TextBlock Text="Setup Connection"
-                           FontSize="16"
-                           Margin="0,0,0,25"
-                           HorizontalAlignment="Center"
-                           Foreground="{DynamicResource TextSecondaryBrush}"
-                           Opacity="0.8"/>
+                <Border Grid.Column="0"
+                        CornerRadius="28,0,0,28"
+                        Padding="35,25">
 
-                <TextBlock Text="Your Name"
-                           Margin="0,0,0,5"
-                           Foreground="{DynamicResource TextSecondaryBrush}"/>
+                    <StackPanel>
 
-                <TextBox Style="{StaticResource ModernTextBoxStyle}"
-                         Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
-                         Height="40"
-                         Margin="0,0,0,15"
-                         IsEnabled="{Binding IsWaiting, Converter={StaticResource BoolInverseConverter}}"/>
+                        <TextBlock Text="PeerChat"
+                                   FontSize="36"
+                                   FontWeight="Bold"
+                                   HorizontalAlignment="Center"
+                                   Margin="0,0,0,5"
+                                   Foreground="{DynamicResource AccentBrush}"/>
 
-                <TextBlock Text="Role"
-                           Margin="0,0,0,5"
-                           Foreground="{DynamicResource TextSecondaryBrush}"/>
+                        <TextBlock Text="Professional Real-Time Messaging"
+                                   FontSize="13"
+                                   Margin="0,0,0,25"
+                                   HorizontalAlignment="Center"
+                                   Foreground="{DynamicResource TextSecondaryBrush}"/>
 
-                <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
-                    <RadioButton Content="Join as Client"
+                        <TextBlock Text="Your Name"
+                                   Margin="0,0,0,5"
+                                   Foreground="{DynamicResource TextSecondaryBrush}"/>
+                        <TextBox Style="{StaticResource ModernTextBoxStyle}"
+                                 Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
+                                 Height="40"
+                                 Margin="0,0,0,15"
+                                 IsEnabled="{Binding IsWaiting, Converter={StaticResource BoolInverseConverter}}"/>
+
+                        <TextBlock Text="Role"
+                                   Margin="0,0,0,5"
+                                   Foreground="{DynamicResource TextSecondaryBrush}"/>
+                        <StackPanel Orientation="Horizontal"
+                                    Margin="0,0,0,15">
+                            <RadioButton Content="Join as Client"
+                                         IsEnabled="{Binding IsWaiting, Converter={StaticResource BoolInverseConverter}}"
+                                         IsChecked="{Binding IsUser, Mode=OneWay}"
+                                         Command="{Binding SelectJoinCommand}"
+                                         Margin="0,0,20,0"
+                                         Foreground="{DynamicResource TextPrimaryBrush}"/>
+                            <RadioButton Content="Host as Server"
+                                         IsEnabled="{Binding IsWaiting, Converter={StaticResource BoolInverseConverter}}"
+                                         IsChecked="{Binding IsAdmin, Mode=OneWay}"
+                                         Command="{Binding SelectHostCommand}"
+                                         Foreground="{DynamicResource TextPrimaryBrush}"/>
+                        </StackPanel>
+
+                        <TextBlock Text="IP Address"
+                                   Margin="0,0,0,5"
+                                   Foreground="{DynamicResource TextSecondaryBrush}"/>
+
+                        <TextBox Style="{StaticResource ModernTextBoxStyle}"
+                                 Text="{Binding ConnectionIPAdress, UpdateSourceTrigger=PropertyChanged}"
+                                 Visibility="{Binding IsAdmin, Converter={StaticResource BoolInverseConverter}}"
+                                 Height="40"
+                                 Margin="0,0,0,15"
+                                 IsEnabled="{Binding IsIPEnabled}"/>        
+
+
+                        <StackPanel Margin="0,0,0,15"
+                                    Visibility="{Binding IsWaiting, Converter={StaticResource BoolToVisibility}}">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBox Grid.Column="0"
+                                         Text="{Binding HostDisplayAddress, Mode=OneWay}"
+                                         Style="{StaticResource ModernTextBoxStyle}"
+                                         IsReadOnly="True"
+                                         Height="40"/>
+                                <Button Grid.Column="1"
+                                        Command="{Binding CopyAddressCommand}"
+                                        Style="{StaticResource IconButtonStyle}"
+                                               Background="{DynamicResource TextSecondaryBrush}"
+                                        
+                                        ToolTip="Copy IP and Port"
+                                        Cursor="Hand"
+                                        Width="40"
+                                        Margin="8,0,0,0">
+                                    <TextBlock Text="📋"
+                                               VerticalAlignment="Center"
+                                               HorizontalAlignment="Center"
+                                               FontSize="18"/>
+                                </Button>
+                            </Grid>
+                        </StackPanel>
+
+                        <TextBlock Text="Port"
+                                   Margin="0,0,0,5"
+                                   Foreground="{DynamicResource TextSecondaryBrush}"/>
+                        <TextBox Style="{StaticResource ModernTextBoxStyle}"
+                                 Text="{Binding Port, UpdateSourceTrigger=PropertyChanged}"
                                  IsEnabled="{Binding IsWaiting, Converter={StaticResource BoolInverseConverter}}"
-                                 IsChecked="{Binding IsUser,Mode=OneWay}"
-                                 Command="{Binding SelectJoinCommand}"
-                                 Margin="0,0,20,0"
-                                 Foreground="{DynamicResource TextPrimaryBrush}"/>
+                                 Height="40"
+                                 Margin="0,0,0,20"/>
 
-                    <RadioButton Content="Host as Server"
-                                 IsEnabled="{Binding IsWaiting, Converter={StaticResource BoolInverseConverter}}"
-                                 IsChecked="{Binding IsAdmin,Mode=OneWay}"
-                                 Command="{Binding SelectHostCommand}"
-                                 Foreground="{DynamicResource TextPrimaryBrush}"/>
-                </StackPanel>
+                        <TextBlock Text="{Binding ErrorMessage}"
+                                   HorizontalAlignment="Center"
+                                   Foreground="{DynamicResource DangerBrush}"
+                                   FontSize="12"
+                                   FontWeight="Bold"
+                                   TextWrapping="Wrap"
+                                   Margin="0,0,0,15"
+                                   Visibility="{Binding HasError, Converter={StaticResource BoolToVisibility}}"/>
 
-                <StackPanel>
-                    <TextBlock Text="IP Address"
-                               Margin="0,0,0,5"
-                               Foreground="{DynamicResource TextSecondaryBrush}"/>
+                        <StackPanel Orientation="Horizontal"
+                                    HorizontalAlignment="Center"
+                                    Margin="0,0,0,12">
+                            <Button Content="Host"
+                                    Command="{Binding HostCommand}"
+                                    Visibility="{Binding IsAdmin, Converter={StaticResource BoolToVisibility}}"
+                                    IsEnabled="{Binding IsWaiting, Converter={StaticResource BoolInverseConverter}}"
+                                    Style="{StaticResource PrimaryButtonStyle}"
+                                    Width="110"
+                                    Height="38"
+                                    Margin="0,0,10,0"/>
+                            <Button Content="Join"
+                                    Command="{Binding JoinCommand}"
+                                    Visibility="{Binding IsUser, Converter={StaticResource BoolToVisibility}}"
+                                    IsEnabled="{Binding IsWaiting, Converter={StaticResource BoolInverseConverter}}"
+                                    Style="{StaticResource PrimaryButtonStyle}"
+                                    Width="110"
+                                    Height="38"
+                                    Margin="0,0,10,0"/>
+                            <Button Content="Cancel"
+                                    Command="{Binding CancelHostCommand}"
+                                    Visibility="{Binding IsWaiting, Converter={StaticResource BoolToVisibility}}"
+                                    Style="{StaticResource DangerButton}"
+                                    Width="110"
+                                    Height="38"/>
+                        </StackPanel>
 
-                    <TextBox Style="{StaticResource ModernTextBoxStyle}"
-                             Text="{Binding ConnectionIPAdress, UpdateSourceTrigger=PropertyChanged}"
-                             Height="40"
-                             Margin="0,0,0,15"
-                             IsEnabled="{Binding IsIPEnabled}"/>
-                </StackPanel>
+                        <TextBlock Text="Waiting for peer..."
+                                   HorizontalAlignment="Center"
+                                   Margin="0,5,0,5"
+                                   Foreground="{DynamicResource TextPrimaryBrush}"
+                                   Visibility="{Binding IsWaiting, Converter={StaticResource BoolToVisibility}}"/>
 
-                <StackPanel Orientation="Horizontal"
-                            Margin="0,0,0,15"
-                            Visibility="{Binding IsWaiting, Converter={StaticResource BoolToVisibility}}">
-                    <TextBox Text="{Binding HostDisplayAddress, Mode=OneWay}"
-                             Style="{StaticResource ModernTextBoxStyle}"
-                             AcceptsReturn="True"
-                             TextWrapping="Wrap"
-                             IsReadOnly="True"
-                             Height="40"
-                             Width="200"/>
-                    <Button Command="{Binding CopyAddressCommand}"
-                            Style="{StaticResource IconButtonStyle}"
-                            ToolTip="Copy IP and Port"
-                            Cursor="Hand">
-                        <TextBlock Text="📋"
-                                   VerticalAlignment="Center"
-                                   HorizontalAlignment="Center"/>
-                    </Button>
-                </StackPanel>
+                        <ProgressBar IsIndeterminate="True"
+                                     Height="4"
+                                     Margin="0,5,0,0"
+                                     Visibility="{Binding IsJoinWaiting, Converter={StaticResource BoolToVisibility}}"/>
 
-                <TextBlock Text="Port"
-                           Margin="0,0,0,5"
-                           Foreground="{DynamicResource TextSecondaryBrush}"/>
+                    </StackPanel>
+                </Border>
 
-                <TextBox Style="{StaticResource ModernTextBoxStyle}"
-                         Text="{Binding Port, UpdateSourceTrigger=PropertyChanged}"
-                         IsEnabled="{Binding IsWaiting, Converter={StaticResource BoolInverseConverter}}"
-                         Height="40"
-                         Margin="0,0,0,20"/>
+                <Border Grid.Column="1"
+                        CornerRadius="0,28,28,0"
+                        ClipToBounds="True">
+                    <Grid>
+                        <Grid.Background>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                <GradientStop Color="#7C4DFF" Offset="0"/>
+                                <GradientStop Color="#5B3EFF" Offset="0.5"/>
+                                <GradientStop Color="#8B5CF6" Offset="1"/>
+                            </LinearGradientBrush>
+                        </Grid.Background>
 
-                <TextBlock Text="{Binding ErrorMessage}"
-                           HorizontalAlignment="Center"
-                           Foreground="{DynamicResource DangerBrush}"
-                           FontSize="13"
-                           FontWeight="Bold"
-                           TextWrapping="Wrap"
-                           Margin="0,0,0,20"
-                           Visibility="{Binding HasError, Converter={StaticResource BoolToVisibility}}"/>
+                        <StackPanel VerticalAlignment="Top"
+                                    Margin="40,40,40,0">
+                            <TextBlock Text="Connect Instantly"
+                                       FontSize="32"
+                                       FontWeight="Bold"
+                                       Foreground="White"/>
+                            <TextBlock Text="Secure peer-to-peer messaging with image and video sharing."
+                                       FontSize="15"
+                                       Margin="0,10,0,0"
+                                       Foreground="#E9D5FF"
+                                       Width="360"
+                                       TextWrapping="Wrap"/>
+                        </StackPanel>
 
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                    <Button Content="Host"
-                            Command="{Binding HostCommand}"
-                            Visibility="{Binding IsAdmin, Converter={StaticResource BoolToVisibility}}"
-                            IsEnabled="{Binding IsWaiting, Converter={StaticResource BoolInverseConverter}}"
-                            Style="{StaticResource PrimaryButtonStyle}"
-                            Width="110"
-                            Height="40"
-                            Margin="0,0,10,0"/>
-
-                    <Button Content="Join"
-                            Command="{Binding JoinCommand}"
-                            Visibility="{Binding IsUser, Converter={StaticResource BoolToVisibility}}"
-                            IsEnabled="{Binding IsWaiting, Converter={StaticResource BoolInverseConverter}}"
-                            Style="{StaticResource PrimaryButtonStyle}"
-                            Width="110"
-                            Height="40"
-                            Margin="0,0,10,0"/>
-
-                    <Button Content="Cancel"
-                            Command="{Binding CancelHostCommand}"
-                            Visibility="{Binding IsWaiting, Converter={StaticResource BoolToVisibility}}"
-                            Style="{StaticResource DangerButton}"
-                            Width="110"
-                            Height="40"/>
-                </StackPanel>
-
-                <TextBlock Text="Waiting for peer..."
-                           HorizontalAlignment="Center"
-                           Margin="0,15"
-                           Foreground="{DynamicResource TextPrimaryBrush}"
-                           Visibility="{Binding IsWaiting, Converter={StaticResource BoolToVisibility}}"/>
-
-                <ProgressBar IsIndeterminate="True"
-                             Height="6"
-                             Margin="0,0,0,15"
-                             Visibility="{Binding IsWaiting, Converter={StaticResource BoolToVisibility}}"/>
-            </StackPanel>
+                        <Border Width="400"
+                                Height="300"
+                                CornerRadius="24"
+                                Background="#20FFFFFF"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Padding="12">
+                            <Image Source="/Resources/banner.png"
+                                   Stretch="UniformToFill"/>
+                        </Border>
+                    </Grid>
+                </Border>
+            </Grid>
         </Border>
     </Grid>
 </UserControl>

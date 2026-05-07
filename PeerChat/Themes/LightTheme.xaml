@@ -2,21 +2,55 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
     <!-- Light Theme Colors -->
-    <SolidColorBrush x:Key="BackgroundBrush" Color="#F5F5F5"/>
+    <SolidColorBrush x:Key="BackgroundBrush" Color="#F8F9FA"/>
     <SolidColorBrush x:Key="SurfaceBrush" Color="#FFFFFF"/>
-    <SolidColorBrush x:Key="BorderBrush" Color="#E0E0E0"/>
-    <SolidColorBrush x:Key="TextPrimaryBrush" Color="#212121"/>
-    <SolidColorBrush x:Key="TextSecondaryBrush" Color="Black"/>
-    <SolidColorBrush x:Key="AccentBrush" Color="#007ACC"/>
-    <SolidColorBrush x:Key="AccentHoverBrush" Color="#005A9E"/>
-    <SolidColorBrush x:Key="DangerBrush" Color="#D32F2F"/>
-    <SolidColorBrush x:Key="SuccessBrush" Color="#4CAF50"/>
-    <SolidColorBrush x:Key="TextFadeBrush" Color="Gray"/>
+    <SolidColorBrush x:Key="SurfaceElevatedBrush" Color="#F8F9FA"/>
+    <SolidColorBrush x:Key="BorderBrush" Color="#E5E7EB"/>
+    <SolidColorBrush x:Key="BorderLightBrush" Color="#EDF2F7"/>
 
+    <!-- Text Colors -->
+    <SolidColorBrush x:Key="TextPrimaryBrush" Color="#1F2937"/>
+    <SolidColorBrush x:Key="TextSecondaryBrush" Color="#6B7280"/>
+    <SolidColorBrush x:Key="TextTertiaryBrush" Color="Black"/>
+    <SolidColorBrush x:Key="TextInverseBrush" Color="#FFFFFF"/>
+
+    <!-- Accent Colors -->
+    <SolidColorBrush x:Key="AccentBrush" Color="#7C4DFF"/>
+    <SolidColorBrush x:Key="AccentHoverBrush" Color="#9B6BFF"/>
+    <SolidColorBrush x:Key="AccentLightBrush" Color="#F3E8FF"/>
+    <SolidColorBrush x:Key="AccentDarkBrush" Color="#5B3EFF"/>
+
+    <!-- Status Colors -->
+    <SolidColorBrush x:Key="DangerBrush" Color="#DC2626"/>
+    <SolidColorBrush x:Key="DangerHoverBrush" Color="#EF4444"/>
+    <SolidColorBrush x:Key="SuccessBrush" Color="#10B981"/>
+    <SolidColorBrush x:Key="WarningBrush" Color="#F59E0B"/>
+    <SolidColorBrush x:Key="InfoBrush" Color="#3B82F6"/>
+
+    <!-- Input Colors -->
+    <SolidColorBrush x:Key="InputBackgroundBrush" Color="#FFFFFF"/>
+    <SolidColorBrush x:Key="InputBorderBrush" Color="#D1D5DB"/>
+    <SolidColorBrush x:Key="InputHoverBorderBrush" Color="#7C4DFF"/>
+    <SolidColorBrush x:Key="InputFocusBorderBrush" Color="#9B6BFF"/>
 
     <!-- Chat Message Colors -->
-    <SolidColorBrush x:Key="ChatSentBrush" Color="#127a73"/>
-    <SolidColorBrush x:Key="ChatReceivedBrush" Color="#E5E7EB"/>
+    <SolidColorBrush x:Key="ChatSentBrush" Color="#7C4DFF"/>
+    <SolidColorBrush x:Key="ChatReceivedBrush" Color="#F3F4F6"/>
     <SolidColorBrush x:Key="ChatSentTextBrush" Color="#FFFFFF"/>
-    <SolidColorBrush x:Key="ChatReceivedTextBrush" Color="#111827"/>
+    <SolidColorBrush x:Key="ChatReceivedTextBrush" Color="#1F2937"/>
+
+    <!-- Button Colors -->
+    <SolidColorBrush x:Key="ButtonBackgroundBrush" Color="#F3F4F6"/>
+    <SolidColorBrush x:Key="ButtonHoverBrush" Color="#E5E7EB"/>
+    <SolidColorBrush x:Key="ButtonPressedBrush" Color="#D1D5DB"/>
+
+    <!-- Scrollbar Colors -->
+    <SolidColorBrush x:Key="ScrollbarTrackBrush" Color="#F3F4F6"/>
+    <SolidColorBrush x:Key="ScrollbarThumbBrush" Color="#D1D5DB"/>
+    <SolidColorBrush x:Key="ScrollbarThumbHoverBrush" Color="#9CA3AF"/>
+
+    <!-- Card/MessageBubble Colors -->
+    <SolidColorBrush x:Key="CardBackgroundBrush" Color="#FFFFFF"/>
+    <SolidColorBrush x:Key="CardBorderBrush" Color="#E5E7EB"/>
+
 </ResourceDictionary>

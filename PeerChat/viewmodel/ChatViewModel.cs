@@ -56,8 +56,26 @@ namespace PeerChat.ViewModel
             ToggleThemeCommand = new RelayCommand(o => ToggleTheme());
             SendVideoCommand = new RelayCommand(async o => await SendVideo());
             PlayVideoCommand = new RelayCommand(PlayVideo);
+            ShowDebuggerCommand = new RelayCommand(o => ShowDebugger());
+            LogoutCommand = new RelayCommand(async o =>await LogOut());
 
             Initialize();
+        }
+
+        private async Task  LogOut()
+        {
+            var result = MessageBox.Show("Are you sure you want to logout?", "Confirm Logout", MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+            if (result == MessageBoxResult.Yes)
+            {
+                await DisconnectAsync();
+                _mainViewModel.NavigateToConnection();
+            }
+        }
+
+        private void ShowDebugger()
+        {
+            IsDebugConsoleVisible = !IsDebugConsoleVisible;
         }
 
         public void PlayVideo(object obj)
@@ -96,7 +114,9 @@ namespace PeerChat.ViewModel
         public ICommand ToggleThemeCommand { get; }
         public ICommand SendVideoCommand { get; }
         public ICommand PlayVideoCommand { get; }
+        public ICommand ShowDebuggerCommand { get; }
 
+        public ICommand LogoutCommand { get; }
         public string PeerName
         {
             get => _peerName;
@@ -378,7 +398,7 @@ namespace PeerChat.ViewModel
             _isRunning = false;
             _cts.Cancel();
 
-            Application.Current.Dispatcher.Invoke(() =>
+            Application.Current?.Dispatcher?.Invoke(() =>
             {
                 IsTextFieldVisible = false;
                 PreviewImage = null;
@@ -596,6 +616,11 @@ namespace PeerChat.ViewModel
 
                     string videoName = Path.GetFileName(path);
                     long videoSize = new FileInfo(path).Length;
+
+                    var result = MessageBox.Show($"Do you want to send this video?\n\n" + $"File: {videoName}\n" + $"Size: {videoSize}\n\n" + $"Click Yes to send, No to cancel.", "Confirm Video Send", MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+                    if (result != MessageBoxResult.Yes)
+                        return;
 
                     BitmapImage thumbnail = null;
                     try
@@ -874,7 +899,7 @@ namespace PeerChat.ViewModel
 
                 if (Directory.Exists(folderPath))
                 {
-                    Directory.Delete(folderPath, true); 
+                    Directory.Delete(folderPath, true);
                 }
 
             }

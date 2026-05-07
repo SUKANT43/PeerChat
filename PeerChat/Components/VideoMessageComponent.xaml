@@ -3,7 +3,6 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:PeerChat.Components"
              xmlns:conv="clr-namespace:PeerChat.Converters"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="400"
@@ -22,53 +21,70 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-
             </Grid.RowDefinitions>
 
+            <!-- Thumbnail and Play Button Area -->
             <Border Grid.Row="0" 
-                    Background="#2D2D2D" 
+                    Background="{DynamicResource SurfaceBrush}" 
                     CornerRadius="8,8,0,0">
                 <Grid>
                     <Image Source="{Binding Thumbnail, ElementName=VideoControl}"
                            Stretch="Uniform"
-                           MaxHeight="200"/>
+                           MaxHeight="200"
+                           Margin="5"/>
+
+                    <!-- Play Button - Only show when not receiving/sending -->
+                    <Button Command="{Binding PlayVideo, ElementName=VideoControl}"
+                            CommandParameter="{Binding DataContext, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                            Width="50"
+                            Height="50"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Visibility="{Binding IsReceiving, ElementName=VideoControl, Converter={StaticResource InverseBoolConverter}}">
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Border Background="#80000000" CornerRadius="25">
+                                    <TextBlock Text="▶" 
+                                               FontSize="28" 
+                                               Foreground="White"
+                                               HorizontalAlignment="Center"
+                                               VerticalAlignment="Center"/>
+                                </Border>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
+
+                    <!-- Receiving Overlay -->
+                    <Border Background="#80000000"
+                            Visibility="{Binding IsReceiving, ElementName=VideoControl, Converter={StaticResource BoolToVisibility}}">
+                        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                            <TextBlock Text="⏳" FontSize="30" Foreground="White"/>
+                            <TextBlock Text="Receiving..." Foreground="White" Margin="0,5,0,0"/>
+                        </StackPanel>
+                    </Border>
                 </Grid>
             </Border>
 
+            <!-- Progress Bar -->
             <ProgressBar Grid.Row="1" 
-                         Height="10" 
+                         Height="4" 
                          Minimum="0" 
                          Maximum="100" 
-                         Value="{Binding Progress,RelativeSource={RelativeSource AncestorType=UserControl}}"
-                         Visibility="{Binding IsReceiving,Converter={StaticResource BoolToVisibility}}"
-                         Margin="0,0,0,0"/>
+                         Value="{Binding Progress, ElementName=VideoControl}"
+                         Visibility="{Binding IsReceiving, ElementName=VideoControl, Converter={StaticResource BoolToVisibility}}"
+                         Foreground="{DynamicResource PrimaryBrush}"
+                         Background="{DynamicResource BorderBrush}"
+                         Margin="0,5,0,5"/>
 
             <ProgressBar Grid.Row="1" 
-                         Height="10" 
+                         Height="4" 
                          Minimum="0" 
                          Maximum="100" 
-                         Value="{Binding Progress,RelativeSource={RelativeSource AncestorType=UserControl}}"
-                         Visibility="{Binding IsSending,Converter={StaticResource BoolToVisibility}}"
-                         Margin="0,0,0,0"/>
-
-            <StackPanel Grid.Row="2" 
-                        Orientation="Horizontal" 
-                        HorizontalAlignment="Center" 
-                        Margin="0,10,0,10"
-                        Visibility="{Binding IsReceiving,Converter={StaticResource InverseBoolConverter}}">
-
-                <Button Style="{StaticResource PrimaryButtonStyle}" 
-                        Command="{Binding PlayVideo, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                        FontSize="15"
-                        CommandParameter="{Binding}">
-                    <TextBlock Text="▶︎" Margin="8,8,8,8"/>
-                </Button>
-                
-            </StackPanel>
-
-            <Button Grid.Row="3" Height="50" Command="{Binding PlayVideo, RelativeSource={RelativeSource AncestorType=UserControl}}"/>
+                         Value="{Binding Progress, ElementName=VideoControl}"
+                         Visibility="{Binding IsSending, ElementName=VideoControl, Converter={StaticResource BoolToVisibility}}"
+                         Foreground="{DynamicResource PrimaryBrush}"
+                         Background="{DynamicResource BorderBrush}"
+                         Margin="0,5,0,5"/>
         </Grid>
     </Border>
 </UserControl>

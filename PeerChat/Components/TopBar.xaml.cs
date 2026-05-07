@@ -25,12 +25,10 @@ namespace PeerChat.Components
         {
             InitializeComponent();
         }
-
         public static readonly DependencyProperty PeerNameProperty = DependencyProperty.Register(
             nameof(PeerName),
             typeof(string),
-            typeof(TopBar)
-            );
+            typeof(TopBar));
 
         public string PeerName
         {
@@ -39,8 +37,8 @@ namespace PeerChat.Components
         }
 
         public static readonly DependencyProperty ToggleThemeCommandProperty = DependencyProperty.Register(
-            nameof(ToggleThemeCommand), 
-            typeof(ICommand), 
+            nameof(ToggleThemeCommand),
+            typeof(ICommand),
             typeof(TopBar));
 
         public ICommand ToggleThemeCommand
@@ -70,6 +68,17 @@ namespace PeerChat.Components
             get => (string)GetValue(ThemeTextProperty);
             set => SetValue(ThemeTextProperty, value);
         }
+
+        public static readonly DependencyProperty LogoutProperty = DependencyProperty.Register(
+            nameof(Logout),
+            typeof(ICommand),
+            typeof(TopBar));
+        public ICommand Logout
+        {
+            get=>(ICommand)GetValue(LogoutProperty);
+            set => SetValue(LogoutProperty, value);
+        }
+
 
 
     }

@@ -177,11 +177,21 @@ namespace PeerChat.ViewModel
             }
         }
 
+        private bool _isJoinWaiting;
+        public bool IsJoinWaiting
+        {
+            get => _isJoinWaiting;
+            set
+            {
+                _isJoinWaiting = value;
+                OnPropertyChanged();
+            }
+        }
+
         private async Task Join()
         {
             if (!ValidateCommon()) return;
 
-            IsWaiting = true;
 
             if (string.IsNullOrWhiteSpace(ConnectionIPAdress))
             {
@@ -198,16 +208,17 @@ namespace PeerChat.ViewModel
 
             try
             {
+                IsJoinWaiting = true;
                 ErrorMessage = null;
                 var cts = new CancellationTokenSource(TimeSpan.FromSeconds(5));
                 var client = await ConnectionService.ConnectAsync(ConnectionIPAdress, Port, cts.Token);
                 _mainViewModel.NavigateToChat(client, Name, Role,ConnectionIPAdress);
-                IsWaiting = false;
+                IsJoinWaiting = false;
             }
             catch (Exception ex)
             {
                 ErrorMessage = ex.Message;
-                IsWaiting = false;
+                IsJoinWaiting = false;
             }
         }
 

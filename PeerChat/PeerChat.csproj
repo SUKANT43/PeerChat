@@ -66,6 +66,7 @@
     <Compile Include="Components\VideoMessageComponent.xaml.cs">
       <DependentUpon>VideoMessageComponent.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Converters\StatusColorConverter.cs" />
     <Compile Include="Models\DebugLogModel.cs" />
     <Compile Include="Protocol\MessageProtocol.cs" />
     <Compile Include="Services\ChatService.cs" />
@@ -166,6 +167,15 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\banner.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\logoutButton.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\logoutBtn.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

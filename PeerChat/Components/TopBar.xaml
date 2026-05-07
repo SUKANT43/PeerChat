@@ -3,50 +3,77 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:PeerChat.Components"
+             xmlns:conv="clr-namespace:PeerChat.Converters"
              mc:Ignorable="d" 
-             d:DesignHeight="75" d:DesignWidth="400">
-    <Grid>
-        <Border Grid.Row="0"
-                Padding="15,10"
-                Background="{DynamicResource SurfaceBrush}"
-                BorderBrush="{DynamicResource BorderBrush}"
-                BorderThickness="0,0,0,1">
+             d:DesignHeight="70" d:DesignWidth="800">
 
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
+    <UserControl.Resources>
+        <conv:StatusColorConverter x:Key="StatusColorConverter"/>
+    </UserControl.Resources>
+
+    <Border Background="{DynamicResource SurfaceBrush}"
+            BorderBrush="{DynamicResource BorderBrush}"
+            BorderThickness="0,0,0,1">
+
+        <Grid Height="60"
+              Margin="20,0">
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Grid.Column="0"
+                        Orientation="Horizontal"
+                        VerticalAlignment="Center">
+
+                <Border Width="10"
+                        Height="10"
+                        CornerRadius="5"
+                        Background="{Binding UserStatus, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource StatusColorConverter}}"
+                        Margin="0,0,12,0"
+                        VerticalAlignment="Center"/>
 
                 <StackPanel>
-                <TextBlock Grid.Column="0"
-                           Text="{Binding PeerName,RelativeSource={RelativeSource AncestorType=UserControl}}"
-                           FontSize="16"
-                           FontWeight="SemiBold"
-                           HorizontalAlignment="Center"
-                           VerticalAlignment="Center"
-                           Foreground="{DynamicResource TextPrimaryBrush}"/>
-                    <TextBlock Text="{Binding UserStatus,RelativeSource={RelativeSource AncestorType=UserControl}}" 
-                               Margin="0,5,0,0"
-                               FontSize="10"
-                               VerticalAlignment="Center"
-                               HorizontalAlignment="Center"
+                    <TextBlock Text="{Binding PeerName, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                               FontSize="16"
+                               FontWeight="SemiBold"
                                Foreground="{DynamicResource TextPrimaryBrush}"/>
-                </StackPanel>
-                <Button Grid.Column="2"
-                        Command="{Binding ToggleThemeCommand,RelativeSource={RelativeSource AncestorType=UserControl}}"
-                        Style="{StaticResource IconButtonStyle}"
-                        ToolTip="Toggle Theme"
-                        Width="35"
-                        Height="35"
-                        Background="Transparent"
-                        BorderThickness="0"
-                        Cursor="Hand">
-                    <TextBlock Text="{Binding ThemeText,RelativeSource={RelativeSource AncestorType=UserControl}}" FontSize="18" Foreground="{DynamicResource TextPrimaryBrush}"/>
-                </Button>
-            </Grid>
-        </Border>
 
-    </Grid>
+                    <TextBlock Text="{Binding UserStatus, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                               FontSize="11"
+                               Foreground="{DynamicResource TextSecondaryBrush}"
+                               Margin="0,2,0,0"/>
+                </StackPanel>
+            </StackPanel>
+
+            <Button Grid.Column="2"
+                    Command="{Binding ToggleThemeCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                    Style="{StaticResource IconButtonStyle}"
+                    ToolTip="Toggle Theme"
+                    Width="36"
+                    Height="36"
+                    Margin="0,0,8,0"
+                    Cursor="Hand">
+                <TextBlock Text="{Binding ThemeText, RelativeSource={RelativeSource AncestorType=UserControl}}" 
+                           FontSize="18" 
+                           Foreground="{DynamicResource TextPrimaryBrush}"/>
+            </Button>
+
+            <Button Grid.Column="3"
+                    Style="{StaticResource IconButtonStyle}"
+                    Command="{Binding Logout,RelativeSource={RelativeSource AncestorType=UserControl}}"
+                    ToolTip="Logout"
+                    Width="36"
+                    Height="36"
+                    Cursor="Hand">
+                <Image Source="/Resources/logoutButton.png" 
+                       Width="30" 
+                       Height="30"
+                       Stretch="Uniform"/>
+            </Button>
+        </Grid>
+    </Border>
 </UserControl>
