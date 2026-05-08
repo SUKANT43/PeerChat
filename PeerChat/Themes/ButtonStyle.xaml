@@ -43,7 +43,7 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Background" Value="{DynamicResource BorderBrush}"/>
+                            <Setter Property="Background" Value="{DynamicResource IconHoverColor}"/>
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="False">
                             <Setter Property="Opacity" TargetName="Border" Value="0.5"/>
@@ -125,6 +125,7 @@
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter Property="Background" Value="{DynamicResource AccentHoverBrush}"/>
+                            <Setter Property="BorderBrush" Value="#7c4dff"/>
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="False">
                             <Setter Property="Opacity" TargetName="Border" Value="0.5"/>

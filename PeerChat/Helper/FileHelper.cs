@@ -2,6 +2,7 @@
 using System.IO;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -57,6 +58,11 @@ namespace PeerChat.Helper
 
                 return image;
             }
+        }
+
+        public static async Task<BitmapImage> GenerateVideoThumbnailAsync(string videoPath)
+        {
+            return null;
         }
     }
 }

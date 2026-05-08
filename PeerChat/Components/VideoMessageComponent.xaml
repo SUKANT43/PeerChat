@@ -26,7 +26,6 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <!-- Thumbnail and Play Button Area -->
             <Border Grid.Row="0" 
                     Background="{DynamicResource SurfaceElevatedBrush}" 
                     CornerRadius="12,12,0,0">
@@ -53,7 +52,6 @@
                         </Image.Style>
                     </Image>
 
-                    <!-- Play Button -->
                     <Button Command="{Binding PlayVideo, ElementName=VideoControl}"
                             CommandParameter="{Binding DataContext, RelativeSource={RelativeSource AncestorType=UserControl}}"
                             Width="48"
@@ -83,9 +81,7 @@
                 </Grid>
             </Border>
 
-            <!-- Progress Bar Section -->
             <Grid Grid.Row="1" Margin="12,10,12,0">
-                <!-- Progress Bar -->
                 <ProgressBar Height="4" 
                              Minimum="0" 
                              Maximum="100" 
@@ -102,13 +98,12 @@
                              Foreground="{DynamicResource AccentBrush}"
                              Background="{DynamicResource BorderBrush}"/>
 
-                <!-- Progress Text -->
                 <TextBlock Text="{Binding Progress, ElementName=VideoControl, StringFormat={}{0:0}%}"
                            FontSize="11"
                            FontWeight="SemiBold"
                            Foreground="{DynamicResource AccentBrush}"
                            HorizontalAlignment="Right"
-                           Margin="0,8,0,0"
+                           Margin="0,12,0,0"
                            Visibility="{Binding IsReceiving, ElementName=VideoControl, Converter={StaticResource BoolToVisibility}}"/>
 
                 <TextBlock Text="{Binding Progress, ElementName=VideoControl, StringFormat={}{0:0}%}"
@@ -116,11 +111,10 @@
                            FontWeight="SemiBold"
                            Foreground="{DynamicResource AccentBrush}"
                            HorizontalAlignment="Right"
-                           Margin="0,8,0,0"
+                           Margin="0,12,0,0"
                            Visibility="{Binding IsSending, ElementName=VideoControl, Converter={StaticResource BoolToVisibility}}"/>
             </Grid>
 
-            <!-- File Name -->
             <TextBlock Grid.Row="2"
                        Text="{Binding FileName, ElementName=VideoControl}"
                        FontSize="11"

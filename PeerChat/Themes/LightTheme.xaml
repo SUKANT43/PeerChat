@@ -2,7 +2,7 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
     <SolidColorBrush x:Key="BackgroundBrush" Color="#F8F9FA"/>
-    <SolidColorBrush x:Key="SurfaceBrush" Color="#FFFFFF"/>
+    <SolidColorBrush x:Key="SurfaceBrush" Color="#e3e2de"/>
     <SolidColorBrush x:Key="SurfaceElevatedBrush" Color="#F8F9FA"/>
     <SolidColorBrush x:Key="BorderBrush" Color="#E5E7EB"/>
     <SolidColorBrush x:Key="BorderLightBrush" Color="#EDF2F7"/>
@@ -29,7 +29,7 @@
     <SolidColorBrush x:Key="InputFocusBorderBrush" Color="#9B6BFF"/>
 
     <SolidColorBrush x:Key="ChatSentBrush" Color="#7C4DFF"/>
-    <SolidColorBrush x:Key="ChatReceivedBrush" Color="#F3F4F6"/>
+    <SolidColorBrush x:Key="ChatReceivedBrush" Color="#cbced6"/>
     <SolidColorBrush x:Key="ChatSentTextBrush" Color="#FFFFFF"/>
     <SolidColorBrush x:Key="ChatReceivedTextBrush" Color="#1F2937"/>
 
@@ -43,5 +43,13 @@
 
     <SolidColorBrush x:Key="CardBackgroundBrush" Color="#FFFFFF"/>
     <SolidColorBrush x:Key="CardBorderBrush" Color="#E5E7EB"/>
+
+    <SolidColorBrush x:Key="PngColor" Color="Black"/>
+    
+    <BitmapImage x:Key="PaperPinIcon" UriSource="/Assets/Light/paperClip.png"/>
+    <BitmapImage x:Key="VideoPinIcon" UriSource="/Assets/Light/videoClip.png"/>
+    
+    <SolidColorBrush x:Key="IconHoverColor" Color="LightGray"/>
+
 
 </ResourceDictionary>

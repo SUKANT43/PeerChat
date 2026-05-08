@@ -4,7 +4,7 @@
     <Style x:Key="ModernTextBoxStyle" TargetType="TextBox">
         <Setter Property="Background" Value="{DynamicResource BackgroundBrush}"/>
         <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}"/>
-        <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}"/>
+        <Setter Property="BorderBrush" Value="#7C4DFF"/>
         <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="Padding" Value="12,10"/>
         <Setter Property="FontSize" Value="14"/>
@@ -34,55 +34,6 @@
             </Setter.Value>
         </Setter>
     </Style>
-    <Style x:Key="MessageInputBoxStyle" TargetType="TextBox">
-        <Setter Property="Background" Value="{DynamicResource InputBackgroundBrush}"/>
-        <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}"/>
-        <Setter Property="BorderBrush" Value="{DynamicResource InputBorderBrush}"/>
-        <Setter Property="BorderThickness" Value="1"/>
-        <Setter Property="Padding" Value="12,6"/>
-        <Setter Property="FontSize" Value="13"/>
-        <Setter Property="CaretBrush" Value="{DynamicResource AccentBrush}"/>
-        <Setter Property="Height" Value="30"/>
-        <Setter Property="MinHeight" Value="30"/>
-        <Setter Property="VerticalScrollBarVisibility" Value="Disabled"/>
-        <Setter Property="TextWrapping" Value="NoWrap"/>
-        <Setter Property="AcceptsReturn" Value="False"/>
-        <Setter Property="VerticalContentAlignment" Value="Center"/>
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="TextBox">
-                    <Border CornerRadius="15"
-                        Background="{TemplateBinding Background}"
-                        BorderBrush="{TemplateBinding BorderBrush}"
-                        BorderThickness="{TemplateBinding BorderThickness}">
-
-                        <Grid>
-                            <ScrollViewer x:Name="PART_ContentHost" 
-                                      Margin="{TemplateBinding Padding}"
-                                      VerticalScrollBarVisibility="Disabled"
-                                      HorizontalScrollBarVisibility="Disabled"/>
-
-                            <TextBlock x:Name="Watermark"
-                                   Text="Type a message..."
-                                   Foreground="{DynamicResource TextTertiaryBrush}"
-                                   VerticalAlignment="Center"
-                                   Margin="{TemplateBinding Padding}"
-                                   IsHitTestVisible="False"
-                                   Visibility="Collapsed"/>
-                        </Grid>
-                    </Border>
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="IsFocused" Value="True">
-                            <Setter Property="BorderBrush" Value="{DynamicResource AccentBrush}"/>
-                            <Setter Property="BorderThickness" Value="2"/>
-                        </Trigger>
-                        <Trigger Property="Text" Value="">
-                            <Setter TargetName="Watermark" Property="Visibility" Value="Visible"/>
-                        </Trigger>
-                    </ControlTemplate.Triggers>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
+   
 
 </ResourceDictionary>

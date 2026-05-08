@@ -8,25 +8,31 @@ namespace PeerChat.Protocol
 {
     public static class MessageProtocol
     {
+        private static readonly object _sendLock = new object();
+
         public static async Task SendFrameAsync(NetworkStream stream, byte type, byte[] payload)
         {
-            if (payload == null)
-                payload = new byte[0];
+            lock (_sendLock)
+            {
+                if (payload == null)
+                    payload = new byte[0];
 
-            int length = payload.Length;
+                int length = payload.Length;
 
-            byte[] header = new byte[5];
+                byte[] header = new byte[5];
 
-            header[0] = type;
-            header[1] = (byte)(length >> 24);
-            header[2] = (byte)(length >> 16);
-            header[3] = (byte)(length >> 8);
-            header[4] = (byte)(length);
+                header[0] = type;
+                header[1] = (byte)(length >> 24);
+                header[2] = (byte)(length >> 16);
+                header[3] = (byte)(length >> 8);
+                header[4] = (byte)(length);
 
-            await stream.WriteAsync(header, 0, 5);
+                stream.Write(header, 0, 5);
 
-            if (length > 0)
-                await stream.WriteAsync(payload, 0, length);
+                if (length > 0)
+                    stream.Write(payload, 0, length);
+            }
+            await Task.CompletedTask;
         }
 
         public static async Task<MessageFrameModel> ReceiveFrameAsync(NetworkStream stream)

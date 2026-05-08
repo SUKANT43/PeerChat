@@ -39,9 +39,6 @@ namespace PeerChat.Services
             {
                 MessageFrameModel frame = await MessageProtocol.ReceiveFrameAsync(_stream);
 
-                if (frame == null || (MessageType)frame.Type != MessageType.Text)
-                    throw new Exception("Expected name as first message");
-
                 return Encoding.UTF8.GetString(frame.Payload);
             }
             catch (Exception ex)

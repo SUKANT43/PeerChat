@@ -197,7 +197,13 @@
                             Width="40"
                             Height="40"
                             Margin="0,0,4,0">
-                        <TextBlock Text="📷" FontSize="20" Foreground="{DynamicResource AccentBrush}"/>
+                        <Image Source="{DynamicResource PaperPinIcon}"
+                               Width="40"
+                               Height="35"
+                               Stretch="Uniform"
+                               RenderOptions.BitmapScalingMode="HighQuality"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"/>     
                     </Button>
 
                     <!--<Button Style="{StaticResource SendButtonStyle}"
@@ -209,7 +215,9 @@
                                    VerticalAlignment="Center"
                                    HorizontalAlignment="Center"
                                    Margin="0,0,0,5"/>
-                    </Button>-->
+                    </Button>
+
+                    <comp:FilePicker/>-->
 
                     <Button Grid.Column="1"
                             Style="{StaticResource IconButtonStyle}"
@@ -219,7 +227,13 @@
                             Width="40"
                             Height="40"
                             Margin="0,0,8,0">
-                        <TextBlock Text="📹" FontSize="20" Foreground="{DynamicResource AccentBrush}"/>
+                        <Image Source="{DynamicResource VideoPinIcon}"
+                               Width="40"
+                               Height="35"
+                               Stretch="Uniform"
+                               RenderOptions.BitmapScalingMode="HighQuality"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"/>
                     </Button>
 
                    
@@ -235,8 +249,8 @@
                              VerticalContentAlignment="Top"
                              Background="{DynamicResource BackgroundBrush}"
                              Foreground="{DynamicResource TextPrimaryBrush}"
-                             BorderBrush="{DynamicResource BorderBrush}"
-                             BorderThickness="1"
+                              BorderBrush="#7C4DFF"
+                             BorderThickness="2"
                              Margin="5,0">
 
                         <TextBox.InputBindings>
@@ -285,9 +299,10 @@
 
                 <Button Style="{StaticResource IconButtonStyle}"
                         Content="📋 Action Log" Width="100" 
-                        Foreground="{DynamicResource TextSecondaryBrush}"
+                        Foreground="{DynamicResource PngColor}"
                         HorizontalAlignment="Left"
                         Command="{Binding ShowDebuggerCommand}"
+                        FontWeight="DemiBold"
                         Background="Transparent"/>
 
                 <comp:DebugLogPanel Margin="0,8,0,0" 

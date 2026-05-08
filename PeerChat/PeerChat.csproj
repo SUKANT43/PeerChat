@@ -60,6 +60,9 @@
     <Compile Include="Components\DebugLogPanel.xaml.cs">
       <DependentUpon>DebugLogPanel.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Components\FilePicker.xaml.cs">
+      <DependentUpon>FilePicker.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Components\TopBar.xaml.cs">
       <DependentUpon>TopBar.xaml</DependentUpon>
     </Compile>
@@ -67,6 +70,7 @@
       <DependentUpon>VideoMessageComponent.xaml</DependentUpon>
     </Compile>
     <Compile Include="Converters\StatusColorConverter.cs" />
+    <Compile Include="Helper\ThemeHelper.cs" />
     <Compile Include="Models\DebugLogModel.cs" />
     <Compile Include="Protocol\MessageProtocol.cs" />
     <Compile Include="Services\ChatService.cs" />
@@ -81,6 +85,10 @@
       <DependentUpon>ConnectionView.xaml</DependentUpon>
     </Compile>
     <Page Include="Components\DebugLogPanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Components\FilePicker.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -176,6 +184,18 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\logoutBtn.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Light\paperClip.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Dark\paperClip.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Light\VideoClip.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Dark\videoClip.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

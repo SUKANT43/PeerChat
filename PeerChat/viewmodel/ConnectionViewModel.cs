@@ -1,5 +1,6 @@
 ﻿using PeerChat.Base;
 using PeerChat.Enums;
+using PeerChat.Helper;
 using PeerChat.Services;
 using System;
 using System.Net;
@@ -28,11 +29,30 @@ namespace PeerChat.ViewModel
             SelectHostCommand = new RelayCommand(o => SelectHost());
             SelectJoinCommand = new RelayCommand(o => SelectJoin());
             CopyAddressCommand = new RelayCommand(o => CopyAddress());
-            
+            CheckTheme();
             Role = UserRole.User;
             Port = 9000;
             Name = Environment.UserName;
            
+        }
+
+        private void CheckTheme()
+        {
+            string currentTheme = ThemeHelper.GetWindowsTheme();
+
+            var dictionaries = Application.Current.Resources.MergedDictionaries;
+
+            var themeDictionary = dictionaries[0];
+
+            if (currentTheme == "Dark Theme")
+            {
+                themeDictionary.Source = new Uri("themes/DarkTheme.xaml", UriKind.Relative);
+            }
+            else
+            {
+                themeDictionary.Source = new Uri("themes/LightTheme.xaml", UriKind.Relative);
+            }
+
         }
 
         private string _errorMessage;

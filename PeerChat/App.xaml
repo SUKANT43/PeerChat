@@ -16,6 +16,8 @@
                 <view:ChatView/>
             </DataTemplate>
 
+
+
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Themes/LightTheme.xaml"/>
                 <ResourceDictionary Source="Themes/ButtonStyle.xaml"/>
