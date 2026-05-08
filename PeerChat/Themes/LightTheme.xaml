@@ -28,7 +28,7 @@
     <SolidColorBrush x:Key="InputHoverBorderBrush" Color="#7C4DFF"/>
     <SolidColorBrush x:Key="InputFocusBorderBrush" Color="#9B6BFF"/>
 
-    <SolidColorBrush x:Key="ChatSentBrush" Color="#7C4DFF"/>
+    <SolidColorBrush x:Key="ChatSentBrush" Color="#B39DDB"/>
     <SolidColorBrush x:Key="ChatReceivedBrush" Color="#cbced6"/>
     <SolidColorBrush x:Key="ChatSentTextBrush" Color="#FFFFFF"/>
     <SolidColorBrush x:Key="ChatReceivedTextBrush" Color="#1F2937"/>
@@ -48,7 +48,9 @@
     
     <BitmapImage x:Key="PaperPinIcon" UriSource="/Assets/Light/paperClip.png"/>
     <BitmapImage x:Key="VideoPinIcon" UriSource="/Assets/Light/videoClip.png"/>
-    
+    <BitmapImage x:Key="PaperPadIcon" UriSource="/Assets/Light/paperPad.png"/>
+
+
     <SolidColorBrush x:Key="IconHoverColor" Color="LightGray"/>
 
 

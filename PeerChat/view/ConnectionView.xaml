@@ -99,19 +99,23 @@
                                          IsReadOnly="True"
                                          Height="40"/>
 
-                                <Button Grid.Column="1"
-                    Style="{StaticResource IconButtonStyle}"
-                    Command="{Binding CopyAddressCommand}"
-                    ToolTip="Logout"
-                    Width="40"
+                                <Button Style="{StaticResource IconButtonStyle}"
+                                        Command="{Binding CopyAddressCommand}"
+                                        Grid.Column="1"
+                                        ToolTip="Logout"
+                                        Width="40"
                                         Margin="8,0,0,0"
-                    Height="36">
-                                    
-                                    <TextBlock Text="📋"
-                                               VerticalAlignment="Center"
+                                        Height="36">
+
+                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+
+                                        <Image Source="{DynamicResource PaperPadIcon}"
+                                               Height="35"
+                                               Stretch="Uniform"
+                                               RenderOptions.BitmapScalingMode="HighQuality"
                                                HorizontalAlignment="Center"
-                                               Foreground="{DynamicResource TextPrimaryBrush}"
-                                               FontSize="18"/>
+                                               VerticalAlignment="Center"/>
+                                    </StackPanel>
                                 </Button>
                             </Grid>
                         </StackPanel>

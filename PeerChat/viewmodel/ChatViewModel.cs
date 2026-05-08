@@ -613,10 +613,10 @@ namespace PeerChat.ViewModel
 
         public async Task SendVideo()
         {
-            if (IsRecivingVideo)
-            {
-                ResetVideoReceivingState();
-            }
+            //if (IsRecivingVideo)
+            //{
+            //    ResetVideoReceivingState();
+            //}
 
             CancellationTokenSource sendCts = null;
             try
@@ -805,7 +805,7 @@ namespace PeerChat.ViewModel
                     byte[] videoLength = new byte[8];
                     Array.Copy(payload, 260, videoLength, 0, 8);
 
-                    long totalVideoSize = ((long)videoLength[0] << 56) | ((long)videoLength[1] << 48) |((long)videoLength[2] << 40) | ((long)videoLength[3] << 32) |((long)videoLength[4] << 24) | ((long)videoLength[5] << 16) |((long)videoLength[6] << 8) | videoLength[7];
+                    long totalVideoSize = ((long)videoLength[0] << 56) | ((long)videoLength[1] << 48) | ((long)videoLength[2] << 40) | ((long)videoLength[3] << 32) | ((long)videoLength[4] << 24) | ((long)videoLength[5] << 16) | ((long)videoLength[6] << 8) | videoLength[7];
 
                     if (totalVideoSize <= 0 || totalVideoSize > 2147483648)
                     {

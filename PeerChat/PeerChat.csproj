@@ -197,5 +197,11 @@
   <ItemGroup>
     <Resource Include="Assets\Dark\videoClip.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Light\paperPad.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Dark\paperPad.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

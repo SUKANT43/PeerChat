@@ -62,8 +62,7 @@
                             </TextBlock.Style>
                         </TextBlock>
 
-                        <Image MaxWidth="300"
-                               MaxHeight="200"
+                        <Image MaxWidth="320"
                                MouseLeftButtonUp="ImageClick"
                                Stretch="Uniform"
                                Margin="0,4,0,0"
@@ -295,16 +294,31 @@
                            Margin="8,6,0,0"
                            Visibility="{Binding IsTypingVisible, Converter={StaticResource BoolToVisibility}}"/>
 
-             
+
 
                 <Button Style="{StaticResource IconButtonStyle}"
-                        Content="📋 Action Log" Width="100" 
-                        Foreground="{DynamicResource PngColor}"
+                        Width="100"
                         HorizontalAlignment="Left"
                         Command="{Binding ShowDebuggerCommand}"
-                        FontWeight="DemiBold"
-                        Background="Transparent"/>
+                        FontWeight="DemiBold">
 
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+
+                        <Image Source="{DynamicResource PaperPadIcon}"
+                               Height="35"
+                               Stretch="Uniform"
+                               RenderOptions.BitmapScalingMode="HighQuality"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                              />       
+
+                        <TextBlock Text="Action Log" 
+                                   VerticalAlignment="Center"
+                                   Foreground="{DynamicResource PngColor}"/>
+
+                    </StackPanel>
+                </Button>
+                
                 <comp:DebugLogPanel Margin="0,8,0,0" 
                                     Height="200" 
                                     DebugList="{Binding DebugLogList}" 
