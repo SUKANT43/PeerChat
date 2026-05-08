@@ -211,6 +211,7 @@
                                 Background="#20FFFFFF"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center"
+                                Margin="0 10 0 0"
                                 Padding="12">
                             <Image Source="/Resources/banner.png"
                                    Stretch="UniformToFill"/>

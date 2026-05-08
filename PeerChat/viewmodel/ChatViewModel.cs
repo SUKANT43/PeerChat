@@ -30,7 +30,6 @@ namespace PeerChat.ViewModel
         private bool _isTyping;
         private string _connectionIPAdress;
         private readonly CancellationTokenSource _cts = new CancellationTokenSource();
-        private readonly object _videoLock = new object();
 
         public ObservableCollection<MessageModel> MessageList { get; private set; }
         public ObservableCollection<DebugLogModel> DebugLogList { get; private set; }
@@ -872,7 +871,7 @@ namespace PeerChat.ViewModel
                         BitmapImage thumbnail = null;
                         try
                         {
-                            //thumbnail = FileHelper.GenerateVideoThumbnailAsync(finalPath);
+                            thumbnail =await FileHelper.GenerateVideoThumbnailAsync(finalPath);
                         }
                         catch (Exception ex)
                         {
@@ -927,7 +926,7 @@ namespace PeerChat.ViewModel
         }
 
         private void DeleteVideoFolder()
-        {
+        {  
             try
             {
                 string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);

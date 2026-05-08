@@ -62,7 +62,83 @@ namespace PeerChat.Helper
 
         public static async Task<BitmapImage> GenerateVideoThumbnailAsync(string videoPath)
         {
-            return null;
+            try
+            {
+                var thumbnailTask = await Application.Current.Dispatcher.InvokeAsync(
+                    () => GenerateVideoThumbnail(videoPath));
+
+                return await thumbnailTask;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        public static async Task<BitmapImage> GenerateVideoThumbnail(string videoPath)
+        {
+            try
+            {
+                MediaPlayer player = new MediaPlayer();
+                player.ScrubbingEnabled = true;
+
+                player.Open(new Uri(videoPath, UriKind.Absolute));
+
+                await Task.Delay(1000);
+
+                player.Position = TimeSpan.FromMilliseconds(250);
+
+                await Task.Delay(300);
+
+                int width = player.NaturalVideoWidth;
+                int height = player.NaturalVideoHeight;
+
+                if (width <= 0) width = 250;
+                if (height <= 0) height = 160;
+
+                DrawingVisual visual = new DrawingVisual();
+
+                using (DrawingContext dc = visual.RenderOpen())
+                {
+                    dc.DrawVideo(player, new Rect(0, 0, width, height));
+                }
+
+                RenderTargetBitmap renderBitmap =
+                    new RenderTargetBitmap(
+                        width,
+                        height,
+                        96,
+                        96,
+                        PixelFormats.Pbgra32);
+
+                renderBitmap.Render(visual);
+
+                BitmapImage image = new BitmapImage();
+
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    PngBitmapEncoder encoder = new PngBitmapEncoder();
+                    encoder.Frames.Add(BitmapFrame.Create(renderBitmap));
+
+                    encoder.Save(ms);
+
+                    ms.Position = 0;
+
+                    image.BeginInit();
+                    image.CacheOption = BitmapCacheOption.OnLoad;
+                    image.StreamSource = ms;
+                    image.EndInit();
+                    image.Freeze();
+                }
+
+                player.Close();
+
+                return image;
+            }
+            catch
+            {
+                return null;
+            }
         }
     }
 }

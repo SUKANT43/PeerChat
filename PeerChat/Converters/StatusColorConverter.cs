@@ -11,14 +11,18 @@ namespace PeerChat.Converters
         {
             string status = value as string;
             if (status == "Online")
-                return new SolidColorBrush(Color.FromRgb(0, 200, 83)); // Green
+                return new SolidColorBrush(Color.FromRgb(0, 200, 83)); 
             else
-                return new SolidColorBrush(Color.FromRgb(239, 68, 68)); // Red
+                return new SolidColorBrush(Color.FromRgb(239, 68, 68)); 
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            throw new NotImplementedException();
+            string status = value as string;
+            if (status == "Online")
+                return new SolidColorBrush(Color.FromRgb(0, 200, 83));
+            else
+                return new SolidColorBrush(Color.FromRgb(239, 68, 68));
         }
     }
 }
