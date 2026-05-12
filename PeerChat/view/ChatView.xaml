@@ -135,7 +135,10 @@
                           HorizontalScrollBarVisibility="Disabled">
 
                 <ItemsControl ItemsSource="{Binding MessageList}"
-                              ItemTemplate="{StaticResource MessageTemplate}">
+                              ItemTemplate="{StaticResource MessageTemplate}"
+                              VirtualizingPanel.IsVirtualizing="True"
+                              VirtualizingPanel.VirtualizationMode="Recycling"
+                              ScrollViewer.CanContentScroll="True">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
                             <StackPanel Orientation="Vertical"/>
@@ -243,6 +246,7 @@
                              Text="{Binding Message, UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"
                              AcceptsReturn="True"
                              TextWrapping="Wrap"
+                             MaxHeight="100"
                              MinHeight="40" 
                              Height="Auto"
                              VerticalScrollBarVisibility="Auto"
@@ -250,7 +254,7 @@
                              VerticalContentAlignment="Top"
                              Background="{DynamicResource BackgroundBrush}"
                              Foreground="{DynamicResource TextPrimaryBrush}"
-                              BorderBrush="#7C4DFF"
+                             BorderBrush="#7C4DFF"
                              BorderThickness="2"
                              Margin="5,0">
 

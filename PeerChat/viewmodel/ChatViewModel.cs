@@ -639,6 +639,7 @@ namespace PeerChat.ViewModel
 
                     if (result != MessageBoxResult.Yes)
                         return;
+                    IsSending = true;
 
                     BitmapImage thumbnail;
                     try
@@ -671,12 +672,11 @@ namespace PeerChat.ViewModel
                     {
                         bool isFirstChunk = true;
                         int bytesRead;
-                        byte[] buffer = new byte[1024 * 32];
+                        byte[] buffer = new byte[1024 * 64];
                         long sentSize = 0;
 
                         using (var fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read, buffer.Length, true))
                         {
-                            IsSending = true;
 
                             while (_isRunning && (bytesRead = await fs.ReadAsync(buffer, 0, buffer.Length, sendCts.Token)) > 0)
                             {
@@ -774,11 +774,13 @@ namespace PeerChat.ViewModel
                         MessageList.Remove(_sendMessageModel);
                     _sendMessageModel = null;
                 });
+                IsSending = false;
                 await DisconnectAsync();
             }
             finally
             {
                 sendCts?.Dispose();
+                IsSending = false;
             }
         }
 
